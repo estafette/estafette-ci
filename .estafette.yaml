@@ -37,6 +37,8 @@ stages:
     values: |-
       # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
       cockroachdb:
+        conf:
+          single-node: true
         statefulset:
           replicas: 1
         storage:
