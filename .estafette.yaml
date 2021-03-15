@@ -84,7 +84,7 @@ stages:
   publish-helm-chart:
     image: extensions/helm:dev
     action: publish
-    branch: main
+    repoBranch: main
 
   slack-notify:
     image: extensions/slack-build-status:dev
@@ -106,7 +106,7 @@ releases:
       purge-prerelease-helm-charts:
         image: extensions/helm:dev
         action: purge
-        branch: main
+        repoBranch: main
 
       create-github-release:
         image: extensions/github-release:dev
