@@ -28,10 +28,11 @@ stages:
   test-helm-chart:
     services:
     - name: kubernetes
-      image: bsycorp/kind:latest-1.12
+      image: bsycorp/kind:latest-1.19
       readiness:
         path: /kubernetes-ready
         port: 10080
+        timeoutSeconds: 120
     image: extensions/helm:dev
     action: test
     values: |-
