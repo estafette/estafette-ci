@@ -1,3 +1,20 @@
 # Default values for estafette-ci.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
+cockroachdb:
+  statefulset:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 4Gi
+      limits:
+        memory: 4Gi
+    podAntiAffinity:
+      type: hard
+  tls:
+    enabled: true
+  service:
+    public:
+      annotations:
+        service.alpha.kubernetes.io/app-protocols: '{"http":"HTTPS"}'
