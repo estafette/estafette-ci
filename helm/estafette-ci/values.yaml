@@ -1,4 +1,4 @@
-cockroachdb:
+db:
   statefulset:
     resources:
       requests:
@@ -20,8 +20,8 @@ cockroachdb:
       # This will delete job after succeeded
       helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 
-estafette-ci-api: {}
+api: {}
 
-estafette-ci-web: {}
+web: {}
 
-estafette-ci-cron-event-sender: {}
+# estafette-ci-cron-event-sender: {}
