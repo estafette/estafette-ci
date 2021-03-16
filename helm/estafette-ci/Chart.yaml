@@ -5,13 +5,13 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: cockroachdb
-  version: 5.0.5
+  version: 5.0.6
   repository: https://charts.cockroachdb.com/
 - name: estafette-ci-web
   version: 1.0.0-add-official-helm-chart-623
   repository: https://helm.estafette.io/
 - name: estafette-ci-api
-  version: 1.0.0-add-official-helm-chart-891
+  version: 1.0.0-main-1606
   repository: https://helm.estafette.io/
 - name: estafette-ci-cron-event-sender
   version: 1.0.0-add-official-helm-chart-42

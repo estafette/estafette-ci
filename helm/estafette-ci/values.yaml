@@ -1,7 +1,3 @@
-# Default values for estafette-ci.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 cockroachdb:
   statefulset:
     resources:
@@ -23,3 +19,9 @@ cockroachdb:
       helm.sh/hook: post-install,post-upgrade
       # This will delete job after succeeded
       helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+
+estafette-ci-api: {}
+
+estafette-ci-web: {}
+
+estafette-ci-cron-event-sender: {}
