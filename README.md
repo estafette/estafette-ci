@@ -57,6 +57,8 @@ db:
     - estafette-ci-db.mydomain.com
 ```
 
+For more information on configuring the _CockroachDB_ helm chart see its values at https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
+
 ## Api & web ui
 
 To configure the api part and access to the web ui add the following to `my-values.yaml`:
@@ -166,6 +168,7 @@ api:
                 name: http
 ```
 
+For more information on configurating the _estafette-ci-api_ Helm chart see its values at https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 
 # TODO
 

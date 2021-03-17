@@ -1,3 +1,4 @@
+# https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   tls:
     enabled: true
@@ -11,6 +12,8 @@ db:
       # This will delete job after succeeded
       helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 
+# https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api: {}
 
+# https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web: {}
