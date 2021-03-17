@@ -16,3 +16,7 @@ dependencies:
   version: 1.0.0-main-1054
   repository: https://helm.estafette.io/
   alias: web
+- name: estafette-ci-db-migrator
+  version: 1.0.0-main-178
+  repository: https://helm.estafette.io/
+  alias: db-migrator

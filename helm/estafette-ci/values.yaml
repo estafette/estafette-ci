@@ -17,3 +17,6 @@ api: {}
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web: {}
+
+# https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
+db-migrator: {}
