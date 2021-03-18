@@ -17,10 +17,10 @@ helm repo add estafette https://helm.estafette.io
 Then install the `estafette-ci` chart with
 
 ```
-helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --timeout 300s
+helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --timeout 600s
 ```
 
-With Estafette CI making use of CockroachDB in secure mode you need to approve one or more _certificate signing requests_ by doing the following while the installation runs (and before it times out):
+With Estafette CI making use of CockroachDB in **secure mode** you need to approve one or more _certificate signing requests_ by doing the following while the installation runs (and before it times out):
 
 ```
 kubectl get csr
@@ -66,42 +66,16 @@ To configure the api part and access to the web ui add the following to `my-valu
 
 ```yaml
 api:
-  deployment:
-    env:
-    - name: JAEGER_DISABLED
-      value: 'true'
   secret:
-    enabled: true
     files:
       # the aes-256 key to encrypt/decrypt estafette secrets
       secretDecryptionKey: <generate a 256 bit encryption key, it's used to encrypt estafette secrets>
 
   config:
-    enabled: true
     files: |
       config.yaml: |
         apiServer:
           baseURL: https://estafette-ci.mydomain.com
-          serviceURL: http://estafette-ci-api.estafette-ci.svc.cluster.local
-          logWriters:
-          - database
-          logReader: database
-
-        jobs:
-          # the namespace in which build/release jobs are created
-          namespace: {{ .Release.Namespace }}-jobs
-
-          defaultCPUCores: 0.5
-          minCPUCores: 0.2
-          maxCPUCores: 1.0
-          cpuRequestRatio: 1.0
-          cpuLimitRatio: 3.0
-
-          defaultMemoryBytes: 33554432
-          minMemoryBytes: 67108864
-          maxMemoryBytes: 1063256064
-          memoryRequestRatio: 1.25
-          memoryLimitRatio: 1.0
 
         auth:
           jwt:
@@ -118,12 +92,8 @@ api:
               allowedIdentitiesRegex: <a regular expression to limit access to users of your domain, let's say .+@mydomain\.com>
 
         database:
-          databaseName: estafette_ci_api
-          host: estafette-ci-db-public.estafette-ci.svc.cluster.local
-          insecure: false
-          certificateDir: /cockroach-certs
-          port: 26257
-          user: api
+          databaseName: defaultdb
+          user: root
 
         credentials:
         - name: container-registry-estafette
@@ -131,22 +101,7 @@ api:
           repository: <your docker hub or gcr registry>
           private: false
           username: <username for accessing the docker registry>
-          password: <password for accessing the docker registry>
-
-        trustedImages:
-        - path: extensions/git-clone
-          injectedCredentialTypes:
-          - github-api-token
-        - path: extensions/docker
-          runDocker: true
-          injectedCredentialTypes:
-          - container-registry
-        - path: extensions/github-status
-          injectedCredentialTypes:
-          - github-api-token
-        - path: extensions/github-release
-          injectedCredentialTypes:
-          - github-api-token
+          password: <access token for accessing the docker registry>
 
   ingress:
     enabled: true

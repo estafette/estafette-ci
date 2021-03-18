@@ -41,7 +41,6 @@ api:
       config.yaml: |
         database:
           databaseName: defaultdb
-          host: estafette-ci-db-public
           user: root
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
@@ -53,6 +52,8 @@ db-migrator:
     env:
     - name: COCKROACH_DATABASE
       value: defaultdb
+    - name: COCKROACH_USER
+      value: root
     extraVolumes: |
       - name: client-certificate
         secret:
