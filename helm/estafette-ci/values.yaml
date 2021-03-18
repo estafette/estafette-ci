@@ -1,11 +1,20 @@
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
+  statefulset:
+    env:
+    - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
+      value: "true"
   tls:
     enabled: true
   service:
     public:
       annotations:
+        # required when tls is enabled for cluster and gce ingress is used
         service.alpha.kubernetes.io/app-protocols: '{"http":"HTTPS"}'
+  ingress:
+    annotations:
+      # required when tls is enabled for cluster and nginx ingress is used
+      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
   init:
     annotations:
       helm.sh/hook: post-install,post-upgrade
@@ -26,7 +35,6 @@ api:
     extraVolumeMounts: |
       - name: client-certificate
         mountPath: /cockroach-certs
-
   config:
     enabled: true
     files: |
