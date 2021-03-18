@@ -13,10 +13,43 @@ db:
       helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
-api: {}
+api:
+  deployment:
+    env:
+    - name: JAEGER_DISABLED
+      value: 'true'
+    extraVolumes: |
+      - name: client-certificate
+        secret:
+          secretName: estafette-ci.client.root
+          defaultMode: 384
+    extraVolumeMounts: |
+      - name: client-certificate
+        mountPath: /cockroach-certs
+
+  config:
+    enabled: true
+    files: |
+      config.yaml: |
+        database:
+          databaseName: defaultdb
+          host: estafette-ci-db-public
+          user: root
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web: {}
 
 # https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
-db-migrator: {}
+db-migrator:
+  job:
+    env:
+    - name: COCKROACH_DATABASE
+      value: defaultdb
+    extraVolumes: |
+      - name: client-certificate
+        secret:
+          secretName: estafette-ci.client.root
+          defaultMode: 384
+    extraVolumeMounts: |
+      - name: client-certificate
+        mountPath: /cockroach-certs

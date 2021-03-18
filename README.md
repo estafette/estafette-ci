@@ -29,6 +29,7 @@ kubectl get csr
 You will see one or more csr's and will have to approve this with (for example):
 
 ```
+kubectl certificate approve estafette-ci.client.root
 kubectl certificate approve estafette-ci.node.estafette-ci-db-0
 kubectl certificate approve estafette-ci.node.estafette-ci-db-1
 kubectl certificate approve estafette-ci.node.estafette-ci-db-2

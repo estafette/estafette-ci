@@ -47,11 +47,19 @@ stages:
             size: 1Gi
         tls:
           enabled: false
+
+      api:
+        deployment:
+          extraVolumes: |
+          extraVolumeMounts: |
+
       db-migrator:
         job:
           env:
           - name: COCKROACH_CONNECTION_STRING
             value: postgresql://root@estafette-ci-db-public:26257/defaultdb?sslmode=disable
+          extraVolumes: |
+          extraVolumeMounts: |
 
   clone-charts-repo:
     image: extensions/git-clone:dev
