@@ -24,9 +24,6 @@ db:
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api:
   deployment:
-    env:
-    - name: JAEGER_DISABLED
-      value: 'true'
     extraVolumes: |
       - name: client-certificate
         secret:
