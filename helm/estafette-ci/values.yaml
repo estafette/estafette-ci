@@ -35,10 +35,6 @@ api:
   config:
     enabled: true
     files: |
-      config.yaml: |
-        database:
-          databaseName: defaultdb
-          user: root
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web: {}
@@ -46,11 +42,6 @@ web: {}
 # https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
 db-migrator:
   job:
-    env:
-    - name: COCKROACH_DATABASE
-      value: defaultdb
-    - name: COCKROACH_USER
-      value: root
     extraVolumes: |
       - name: client-certificate
         secret:
