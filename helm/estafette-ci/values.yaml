@@ -50,3 +50,89 @@ db-migrator:
     extraVolumeMounts: |
       - name: client-certificate
         mountPath: /cockroach-certs
+
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
+metrics:
+  server:
+    enabled: true
+
+    global:
+      scrape_interval: 5s
+
+    persistentVolume:
+      enabled: false
+
+    emptyDir:
+      sizeLimit: "1Gi"
+
+    replicaCount: 1
+
+    retention: "6h"
+
+  serverFiles:
+    prometheus.yml:
+      scrape_configs:
+        - job_name: 'kubernetes-nodes-cadvisor'
+          scheme: https
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            insecure_skip_verify: true
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          kubernetes_sd_configs:
+            - role: node
+          relabel_configs:
+            # keep only for namespace running build/release jobs
+            - source_labels: [__meta_kubernetes_namespace]
+              action: keep
+              regex: .+-jobs
+            # keep only the metrics required to calculate max cpu/memory usage by a build/release job
+            - source_labels: [__name__]
+              action: keep
+              regex: container_cpu_usage_seconds_total|container_memory_working_set_bytes
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+            - target_label: __address__
+              replacement: kubernetes.default.svc:443
+            - source_labels: [__meta_kubernetes_node_name]
+              regex: (.+)
+              target_label: __metrics_path__
+              replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+    recording_rules.yml:
+      groups:
+      - name: estafette-ci-max-cpu-calculation
+        rules:
+        # to calculate the max cpu for a job it needs an aggregate to update the rate frequently
+        # powers query: max_over_time(container_cpu_usage_rate1m{container="estafette-ci-builder",pod="...."}[3h])
+        - record: container_cpu_usage_rate1m
+          expr: avg( rate(container_cpu_usage_seconds_total{container!="POD", container!=""}[1m]) ) by (container,pod,namespace)
+
+  # disable all other components
+  serviceAccounts:
+    alertmanager:
+      create: false
+    nodeExporter:
+      create: false
+    pushgateway:
+      create: false
+    server:
+      create: true
+
+  alertmanager:
+    enabled: false
+
+  configmapReload:
+    prometheus:
+      enabled: false
+    alertmanager:
+      enabled: false
+
+  kubeStateMetrics:
+    enabled: false
+
+  nodeExporter:
+    enabled: false
+
+
+  pushgateway:
+    enabled: false
+

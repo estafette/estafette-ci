@@ -20,3 +20,7 @@ dependencies:
   version: 1.0.0-main-184
   repository: https://helm.estafette.io/
   alias: db-migrator
+- name: prometheus
+  version: 13.6.0
+  repository: https://prometheus-community.github.io/helm-charts
+  alias: metrics
