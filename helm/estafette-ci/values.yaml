@@ -82,14 +82,6 @@ metrics:
           kubernetes_sd_configs:
             - role: node
           relabel_configs:
-            # keep only for namespace running build/release jobs
-            - source_labels: [__meta_kubernetes_namespace]
-              action: keep
-              regex: .+-jobs
-            # keep only the metrics required to calculate max cpu/memory usage by a build/release job
-            - source_labels: [__name__]
-              action: keep
-              regex: container_cpu_usage_seconds_total|container_memory_working_set_bytes
             - action: labelmap
               regex: __meta_kubernetes_node_label_(.+)
             - target_label: __address__
@@ -98,6 +90,15 @@ metrics:
               regex: (.+)
               target_label: __metrics_path__
               replacement: /api/v1/nodes/$1/proxy/metrics/resource
+          metric_relabel_configs:
+            # keep only the metrics required to calculate max cpu/memory usage by a build/release job
+            - source_labels: [__name__]
+              action: keep
+              regex: container_cpu_usage_seconds_total|container_memory_working_set_bytes
+            # keep only for namespace running build/release jobs
+            - source_labels: [namespace]
+              action: keep
+              regex: .+-jobs
     recording_rules.yml:
       groups:
       - name: estafette-ci-max-cpu-calculation
