@@ -9,11 +9,11 @@ dependencies:
   repository: https://charts.cockroachdb.com/
   alias: db
 - name: estafette-ci-api
-  version: 1.0.0-main-1644
+  version: 1.0.0-main-1649
   repository: https://helm.estafette.io/
   alias: api
 - name: estafette-ci-web
-  version: 1.0.0-main-1055
+  version: 1.0.0-main-1060
   repository: https://helm.estafette.io/
   alias: web
 - name: estafette-ci-db-migrator
