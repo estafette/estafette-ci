@@ -59,6 +59,7 @@ metrics:
     global:
       scrape_interval: 5s
       scrape_timeout: 5s
+      evaluation_interval: 5s
 
     persistentVolume:
       enabled: false
@@ -124,7 +125,7 @@ metrics:
 
   configmapReload:
     prometheus:
-      enabled: false
+      enabled: true
     alertmanager:
       enabled: false
 
