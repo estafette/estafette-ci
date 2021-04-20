@@ -9,7 +9,7 @@ dependencies:
   repository: https://charts.cockroachdb.com/
   alias: db
 - name: estafette-ci-api
-  version: 1.0.0-main-1662
+  version: 1.0.0-main-1664
   repository: https://helm.estafette.io/
   alias: api
 - name: estafette-ci-web
