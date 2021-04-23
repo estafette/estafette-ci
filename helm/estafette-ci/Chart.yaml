@@ -5,15 +5,15 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: cockroachdb
-  version: 5.1.1
+  version: 5.1.6
   repository: https://charts.cockroachdb.com/
   alias: db
 - name: estafette-ci-api
-  version: 1.0.0-main-1664
+  version: 1.0.0-main-1672
   repository: https://helm.estafette.io/
   alias: api
 - name: estafette-ci-web
-  version: 1.0.0-main-1077
+  version: 1.0.0-main-1088
   repository: https://helm.estafette.io/
   alias: web
 - name: estafette-ci-db-migrator
@@ -21,6 +21,6 @@ dependencies:
   repository: https://helm.estafette.io/
   alias: db-migrator
 - name: prometheus
-  version: 13.7.0
+  version: 13.8.0
   repository: https://prometheus-community.github.io/helm-charts
   alias: metrics
