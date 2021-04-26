@@ -5,7 +5,7 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: cockroachdb
-  version: 5.1.6
+  version: 5.1.7
   repository: https://charts.cockroachdb.com/
   alias: db
 - name: estafette-ci-api
@@ -13,7 +13,7 @@ dependencies:
   repository: https://helm.estafette.io/
   alias: api
 - name: estafette-ci-web
-  version: 1.0.0-main-1088
+  version: 1.0.0-main-1090
   repository: https://helm.estafette.io/
   alias: web
 - name: estafette-ci-db-migrator
