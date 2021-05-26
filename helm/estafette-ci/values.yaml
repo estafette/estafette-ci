@@ -91,6 +91,8 @@ metrics:
               regex: (.+)
               target_label: __metrics_path__
               replacement: /api/v1/nodes/$1/proxy/metrics/resource
+              # for kubernetes < 1.18 use
+              # replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
           metric_relabel_configs:
             # keep only the metrics required to calculate max cpu/memory usage by a build/release job
             - source_labels: [__name__]

@@ -140,7 +140,7 @@ releases:
             serverFiles:
               prometheus.yml:
                 scrape_configs:
-                  - job_name: 'kubernetes-nodes-cadvisor'
+                  - job_name: 'kubernetes-nodes-resource'
                     scheme: https
                     tls_config:
                       ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
