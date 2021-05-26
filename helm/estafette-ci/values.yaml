@@ -1,5 +1,6 @@
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
+  enabled: true
   statefulset:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
@@ -18,6 +19,7 @@ db:
 
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api:
+  enabled: true
   deployment:
     extraVolumes: |
       - name: client-certificate
@@ -32,10 +34,12 @@ api:
     files: |
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
-web: {}
+web:
+  enabled: true
 
 # https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
 db-migrator:
+  enabled: true
   job:
     extraVolumes: |
       - name: client-certificate
@@ -48,6 +52,7 @@ db-migrator:
 
 # https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
 metrics:
+  enabled: true
   server:
     enabled: true
 
