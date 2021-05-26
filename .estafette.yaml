@@ -136,3 +136,33 @@ releases:
                 enabled: true
               persistentVolume:
                 enabled: true
+
+            serverFiles:
+              prometheus.yml:
+                scrape_configs:
+                  - job_name: 'kubernetes-nodes-cadvisor'
+                    scheme: https
+                    tls_config:
+                      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                      insecure_skip_verify: true
+                    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+                    kubernetes_sd_configs:
+                      - role: node
+                    relabel_configs:
+                      - action: labelmap
+                        regex: __meta_kubernetes_node_label_(.+)
+                      - target_label: __address__
+                        replacement: kubernetes.default.svc:443
+                      - source_labels: [__meta_kubernetes_node_name]
+                        regex: (.+)
+                        target_label: __metrics_path__
+                        replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
+                    metric_relabel_configs:
+                      # keep only the metrics required to calculate max cpu/memory usage by a build/release job
+                      - source_labels: [__name__]
+                        action: keep
+                        regex: container_cpu_usage_seconds_total|container_memory_working_set_bytes
+                      # keep only for namespace running build/release jobs
+                      - source_labels: [namespace]
+                        action: keep
+                        regex: .+-jobs
