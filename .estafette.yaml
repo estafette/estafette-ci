@@ -104,3 +104,35 @@ releases:
         action: diff
         tillerless: true
         namespace: estafette-ci
+
+  tooling-estafette:
+    actions:
+    - name: diff
+    - name: install
+    stages:
+      deploy:
+        image: extensions/helm:dev
+        namespace: estafette-ci
+        release: estafette-ci
+        timeout: 300s
+        values: |-
+          db:
+            enabled: false
+
+          api:
+            enabled: false
+
+          web:
+            enabled: false
+
+          db-migrator:
+            enabled: false
+
+          metrics:
+            enabled: true
+            server:
+              replicaCount: 2
+              statefulSet:
+                enabled: true
+              persistentVolume:
+                enabled: true
