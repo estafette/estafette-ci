@@ -10,12 +10,12 @@ dependencies:
   alias: db
   condition: db.enabled
 - name: estafette-ci-api
-  version: 1.0.0-main-1722
+  version: 1.0.0-main-1735
   repository: https://helm.estafette.io/
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.0-main-1110
+  version: 1.0.0-main-1126
   repository: https://helm.estafette.io/
   alias: web
   condition: web.enabled
