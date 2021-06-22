@@ -25,7 +25,7 @@ dependencies:
   alias: db-migrator
   condition: db-migrator.enabled
 - name: prometheus
-  version: 14.1.2
+  version: 14.2.1
   repository: https://prometheus-community.github.io/helm-charts
   alias: metrics
   condition: metrics.enabled
