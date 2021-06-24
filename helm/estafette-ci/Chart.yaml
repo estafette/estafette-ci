@@ -5,7 +5,7 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: cockroachdb
-  version: 6.0.3
+  version: 6.0.4
   repository: https://charts.cockroachdb.com/
   alias: db
   condition: db.enabled
@@ -25,7 +25,7 @@ dependencies:
   alias: db-migrator
   condition: db-migrator.enabled
 - name: prometheus
-  version: 14.2.1
+  version: 14.3.0
   repository: https://prometheus-community.github.io/helm-charts
   alias: metrics
   condition: metrics.enabled
