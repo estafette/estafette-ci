@@ -173,3 +173,12 @@ releases:
             cluster:
               enabled: true
               replicas: 3
+
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                - topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: nats
+                      app.kubernetes.io/instance: estafette-ci-queue
