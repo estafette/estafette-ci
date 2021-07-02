@@ -35,7 +35,7 @@ dependencies:
   alias: queue
   condition: queue.enabled
 - name: estafette-ci-cron-event-sender
-  version: 0.0.72
+  version: 0.0.75
   repository: https://helm.estafette.io/
   alias: cron-event-sender
   condition: cron-event-sender.enabled
