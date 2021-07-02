@@ -166,3 +166,10 @@ releases:
                       - source_labels: [namespace]
                         action: keep
                         regex: .+-jobs
+
+          queue:
+            enabled: true
+
+            cluster:
+              enabled: true
+              replicas: 3
