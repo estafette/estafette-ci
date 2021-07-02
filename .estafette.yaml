@@ -128,6 +128,9 @@ releases:
           db-migrator:
             enabled: false
 
+          cron-event-sender:
+            enabled: false
+
           metrics:
             enabled: true
             server:

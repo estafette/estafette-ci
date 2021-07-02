@@ -10,12 +10,12 @@ dependencies:
   alias: db
   condition: db.enabled
 - name: estafette-ci-api
-  version: 1.0.0-main-1791
+  version: 1.0.0-main-1796
   repository: https://helm.estafette.io/
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.0-main-1152
+  version: 1.0.0-main-1153
   repository: https://helm.estafette.io/
   alias: web
   condition: web.enabled
@@ -34,3 +34,8 @@ dependencies:
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
+- name: estafette-ci-cron-event-sender
+  version: 0.0.72
+  repository: https://helm.estafette.io/
+  alias: cron-event-sender
+  condition: cron-event-sender.enabled
