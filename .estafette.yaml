@@ -180,5 +180,5 @@ releases:
                 - topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchLabels:
-                      app.kubernetes.io/name: nats
-                      app.kubernetes.io/instance: estafette-ci-queue
+                      app.kubernetes.io/name: queue
+                      app.kubernetes.io/instance: estafette-ci
