@@ -10,7 +10,7 @@ dependencies:
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.0-main-1156
+  version: 1.0.0-main-1157
   repository: https://helm.estafette.io/
   alias: web
   condition: web.enabled
