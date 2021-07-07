@@ -4,11 +4,6 @@ description: The resilient and cloud-native CI/CD platform
 name: estafette-ci
 version: 0.1.0
 dependencies:
-- name: cockroachdb
-  version: 6.0.6
-  repository: https://charts.cockroachdb.com/
-  alias: db
-  condition: db.enabled
 - name: estafette-ci-api
   version: 1.0.0-main-1806
   repository: https://helm.estafette.io/
@@ -24,8 +19,19 @@ dependencies:
   repository: https://helm.estafette.io/
   alias: db-migrator
   condition: db-migrator.enabled
+- name: estafette-ci-cron-event-sender
+  version: 0.0.76
+  repository: https://helm.estafette.io/
+  alias: cron-event-sender
+  condition: cron-event-sender.enabled
+
+- name: cockroachdb
+  version: 6.0.6
+  repository: https://charts.cockroachdb.com/
+  alias: db
+  condition: db.enabled
 - name: prometheus
-  version: 14.3.0
+  version: 14.3.1
   repository: https://prometheus-community.github.io/helm-charts
   alias: metrics
   condition: metrics.enabled
@@ -34,8 +40,3 @@ dependencies:
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
-- name: estafette-ci-cron-event-sender
-  version: 0.0.76
-  repository: https://helm.estafette.io/
-  alias: cron-event-sender
-  condition: cron-event-sender.enabled
