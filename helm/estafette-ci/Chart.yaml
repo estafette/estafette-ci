@@ -5,12 +5,12 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: estafette-ci-api
-  version: 1.0.0-main-1809
+  version: 1.0.0-main-1810
   repository: https://helm.estafette.io/
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.0-main-1157
+  version: 1.0.0-main-1158
   repository: https://helm.estafette.io/
   alias: web
   condition: web.enabled
