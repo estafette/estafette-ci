@@ -113,7 +113,7 @@ metrics:
         # to calculate the max cpu for a job it needs an aggregate to update the rate frequently
         # powers query: max_over_time(container_cpu_usage_rate1m{container="estafette-ci-builder",pod="...."}[3h])
         - record: container_cpu_usage_rate1m
-          expr: avg( irate(container_cpu_usage_seconds_total{container!="POD", container!=""}[1m]) ) by (container,pod,namespace)
+          expr: avg( irate(container_cpu_usage_seconds_total{container!="POD", container!=""}[6h]) ) by (container,pod,namespace)
 
   # disable all other components
   serviceAccounts:
