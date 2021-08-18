@@ -168,14 +168,26 @@ releases:
                 annotations:
                   prometheus.io/scheme: "https"
             ingress:
-              enabled: false
+              enabled: true
+              annotations:
+                estafette.io/cloudflare-dns: "true"
+                estafette.io/cloudflare-proxy: "false"
+                estafette.io/cloudflare-hostnames: "estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)"
+              paths: ['/*']
+              hosts:
+              - estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)
+              tls:
+              - hosts: [estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)]
+                secretName: estafette.secret(y64ZOUuKWds5cM3q.swavdbLumTw7-2k2xgHO4sTrClS-5tn_usV1PVaQ8d_OABAn78VAG_niP7k2uYfNyy6aa-8CkuITIt6Ybj4=.oB26a670miw89zQ20VjY7c37HVDj54fnvtdjLEyWrsXXOS5QKfhMpzSg374L4WfHRA==)
             storage:
               persistentVolume:
                 enabled: true
                 size: 50Gi
                 storageClass: fast
             iap:
-              enabled: false
+              enabled: true
+              clientId: estafette.secret(0PFiczIZHfUVzimV.LjGbDOQoYhftsEQAAULSn73GYVz15Vr545C92M0wjzfsiHvOnlqVJGEXY5XztJN5oaJusMz_yTgbuneDFVJ7xjRZAGnuCpyv4FQCxnYZjWvJqJ4UWRbDvg==.fGrdU6R4fkay6VNcX1mCyKrXZkjj8ETm78Wu3o4jwzKyBsHGVInLW1R0GiRBjA3rWA==)
+              clientSecret: estafette.secret(_C6wTHA-5WAE4sls.LZyDR1hBPyC4ip6JrI68VA5pogCEphD6gU0bqYRn5M6VJwPWFP_oBw==.L5_CHkpqfwm-ruXYm4O5XDQrpBfP9zHlsAKldUvBNSnzrHk5L3nfxb_NOrNa4-V2qA==)
 
           api:
             enabled: false
