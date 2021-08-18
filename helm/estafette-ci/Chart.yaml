@@ -36,7 +36,7 @@ dependencies:
   alias: metrics
   condition: metrics.enabled
 - name: nats
-  version: 0.8.4
+  version: 0.8.7
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
