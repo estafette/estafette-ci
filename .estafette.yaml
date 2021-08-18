@@ -243,18 +243,3 @@ releases:
                     matchLabels:
                       app.kubernetes.io/name: queue
                       app.kubernetes.io/instance: estafette-ci
-
-  release:
-    stages:
-      clone-charts-repo:
-        image: extensions/git-clone:dev
-        repo: helm-charts
-        branch: main
-
-      purge-prerelease-helm-charts:
-        image: extensions/helm:dev
-        action: purge
-        repoBranch: main
-
-      create-github-release:
-        image: extensions/github-release:dev
