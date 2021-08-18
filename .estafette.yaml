@@ -117,7 +117,65 @@ releases:
         timeout: 300s
         values: |-
           db:
-            enabled: false
+            enabled: true
+            image:
+              credentials:
+                registry: docker.io
+                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+            conf:
+              locality: continent=europe,country=belgium,region=europe-west1
+              join:
+              - cockroachdb-0.cockroachdb.estafette-ci.svc.cluster.local
+              - cockroachdb-1.cockroachdb.estafette-ci.svc.cluster.local
+              - cockroachdb-2.cockroachdb.estafette-ci.svc.cluster.local
+            statefulset:
+              annotations:
+                prometheus.io/scrape: "true"
+                prometheus.io/path: "/_status/vars"
+                prometheus.io/port: "8080"
+                prometheus.io/scheme: "https"
+              resources:
+                requests:
+                  cpu: 5000m
+                  memory: 12Gi
+                limits:
+                  memory: 12Gi
+              tolerations:
+              - effect: NoSchedule
+                key: cloud.google.com/gke-preemptible
+                operator: Equal
+                value: "true"
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 10
+                  preference:
+                    matchExpressions:
+                    - key: cloud.google.com/gke-preemptible
+                      operator: In
+                      values:
+                      - "true"
+              podAntiAffinity:
+                type: hard
+            service:
+              public:
+                type: NodePort
+                annotations:
+                  prometheus.io/probe: "true"
+                  prometheus.io/probe-path: "/health"
+                  cloud.google.com/neg: '{"ingress": true}'
+              discovery:
+                annotations:
+                  prometheus.io/scheme: "https"
+            ingress:
+              enabled: false
+            storage:
+              persistentVolume:
+                enabled: true
+                size: 50Gi
+                storageClass: fast
+            iap:
+              enabled: false
 
           api:
             enabled: false
