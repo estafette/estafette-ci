@@ -10,9 +10,9 @@ version:
   semver:
     major: 1
     minor: 0
-    patch: 3
+    patch: 4
     labelTemplate: '{{branch}}-{{auto}}'
-    releaseBranch: 1.0.3
+    releaseBranch: 1.0.4
 
 stages:
   lint-and-package:
@@ -125,10 +125,6 @@ releases:
                 password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
             conf:
               locality: continent=europe,country=belgium,region=europe-west1
-              join:
-              - cockroachdb-0.cockroachdb.estafette-ci.svc.cluster.local
-              - cockroachdb-1.cockroachdb.estafette-ci.svc.cluster.local
-              - cockroachdb-2.cockroachdb.estafette-ci.svc.cluster.local
             statefulset:
               annotations:
                 prometheus.io/scrape: "true"

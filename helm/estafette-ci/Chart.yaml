@@ -5,22 +5,22 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: estafette-ci-api
-  version: 1.0.3
+  version: 1.0.4
   repository: https://helm.estafette.io/
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.0
+  version: 1.0.4
   repository: https://helm.estafette.io/
   alias: web
   condition: web.enabled
 - name: estafette-ci-db-migrator
-  version: 1.0.0
+  version: 1.0.4
   repository: https://helm.estafette.io/
   alias: db-migrator
   condition: db-migrator.enabled
 - name: estafette-ci-cron-event-sender
-  version: 1.0.0
+  version: 1.0.4
   repository: https://helm.estafette.io/
   alias: cron-event-sender
   condition: cron-event-sender.enabled
@@ -36,7 +36,7 @@ dependencies:
   alias: metrics
   condition: metrics.enabled
 - name: nats
-  version: 0.8.7
+  version: 0.8.8
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
