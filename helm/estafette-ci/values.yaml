@@ -44,6 +44,8 @@ db:
       value: "true"
   tls:
     enabled: true
+    selfSigner:
+      enabled: false
   service:
     public:
       annotations:
