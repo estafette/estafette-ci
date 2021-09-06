@@ -153,3 +153,7 @@ queue:
 
   natsbox:
     enabled: false
+
+# values specific to this umbrella chart
+nameOverride: ""
+fullnameOverride: ""
