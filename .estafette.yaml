@@ -28,7 +28,7 @@ stages:
   test-helm-chart:
     services:
     - name: kubernetes
-      image: bsycorp/kind:latest-1.19
+      image: bsycorp/kind:latest-1.21
       readiness:
         path: /kubernetes-ready
         port: 10080
@@ -46,18 +46,11 @@ stages:
             enabled: false
             size: 1Gi
 
-      api:
-        deployment:
-          extraVolumes: |
-          extraVolumeMounts: |
-
       db-migrator:
         job:
           env:
           - name: COCKROACH_CONNECTION_STRING
             value: postgresql://root@estafette-ci-db-public:26257/defaultdb
-          extraVolumes: |
-          extraVolumeMounts: |
 
   clone-charts-repo:
     image: extensions/git-clone:dev
