@@ -35,6 +35,7 @@ stages:
         timeoutSeconds: 120
     image: extensions/helm:dev
     action: test
+    timeout: 240s
     values: |-
       db:
         storage:
