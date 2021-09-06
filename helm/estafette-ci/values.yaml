@@ -42,10 +42,6 @@ db:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
       value: "true"
-  tls:
-    enabled: true
-    selfSigner:
-      enabled: false
   service:
     public:
       annotations:
