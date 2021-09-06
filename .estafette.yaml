@@ -55,7 +55,7 @@ stages:
         job:
           env:
           - name: COCKROACH_CONNECTION_STRING
-            value: postgresql://root@estafette-ci-db-public:26257/defaultdb?sslmode=disable
+            value: postgresql://root@estafette-ci-db-public:26257/defaultdb
           extraVolumes: |
           extraVolumeMounts: |
 
