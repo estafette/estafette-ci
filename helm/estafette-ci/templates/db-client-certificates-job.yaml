@@ -1,0 +1,38 @@
+{{- if .Values.db.enabled }}
+{{- range .Values.db.clients }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "estafette-ci-db-migrator.fullname" . }}-{{ . }}
+  labels:
+    {{- include "estafette-ci-db-migrator.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    # This will delete job after succeeded
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 1
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - args:
+        - generate
+        - --client-only
+        env:
+        - name: USER_NAME
+          value: -{{ . | quote }}
+        - name: CA_SECRET
+          value: {{ include "estafette-ci-db-migrator.fullname" . }}-db-ca-secret  ## CA secret where the CA is stored for CRDB
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: gcr.io/cockroachlabs-helm-charts/cockroach-self-signer-cert:dc73bb7f9a40013696fa342af78872fdaa927163
+        imagePullPolicy: Always
+        name: user-cert-job
+      serviceAccountName: {{ include "estafette-ci-db-migrator.fullname" . }}-db-self-signer
+{{- end }}
+{{- end }}

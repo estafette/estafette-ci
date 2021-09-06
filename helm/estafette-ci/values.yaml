@@ -38,6 +38,10 @@ cron-event-sender:
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   enabled: true
+  clients:
+  - root
+  - api
+  - migrator
   statefulset:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
