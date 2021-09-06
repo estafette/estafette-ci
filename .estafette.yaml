@@ -46,12 +46,6 @@ stages:
             enabled: false
             size: 1Gi
 
-      db-migrator:
-        job:
-          env:
-          - name: COCKROACH_CONNECTION_STRING
-            value: postgresql://root@estafette-ci-db-public:26257/defaultdb
-
   clone-charts-repo:
     image: extensions/git-clone:dev
     repo: helm-charts
