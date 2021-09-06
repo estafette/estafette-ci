@@ -5,7 +5,7 @@ api:
     extraVolumes: |
       - name: client-certificate
         secret:
-          secretName: estafette-ci.client.root
+          secretName: estafette-ci-db-client-secret
           defaultMode: 384
     extraVolumeMounts: |
       - name: client-certificate
@@ -25,7 +25,7 @@ db-migrator:
     extraVolumes: |
       - name: client-certificate
         secret:
-          secretName: estafette-ci.client.root
+          secretName: estafette-ci-db-client-secret
           defaultMode: 384
     extraVolumeMounts: |
       - name: client-certificate
@@ -38,10 +38,10 @@ cron-event-sender:
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   enabled: true
-  clients:
-  - root
-  - api
-  - migrator
+  # clients:
+  # - root
+  # - api
+  # - migrator
   statefulset:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
