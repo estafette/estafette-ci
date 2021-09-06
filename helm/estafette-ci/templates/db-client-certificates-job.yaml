@@ -7,9 +7,9 @@ metadata:
   labels:
     {{- include "estafette-ci.labels" $ | nindent 4 }}
   annotations:
-    helm.sh/hook: post-install,post-upgrade
-    # This will delete job after succeeded
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 spec:
   backoffLimit: 1
   completions: 1
