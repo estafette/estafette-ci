@@ -37,8 +37,10 @@ db-migrator:
   enabled: true
   job:
     env:
-      SSL_CA_PATH: /cockroach-certs/ca.crt
-      WAIT_SECONDS: 30
+    - name: SSL_CA_PATH
+      value: /cockroach-certs/ca.crt
+    - name: WAIT_SECONDS
+      value: "30"
     extraVolumes: |
       - name: client-certificate
         projected:
