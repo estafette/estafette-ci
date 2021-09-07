@@ -38,9 +38,6 @@ stages:
     timeout: 240s
     values: |-
       api:
-        secret:
-          files:
-            secretDecryptionKey: 1PsvXVOMkhfAQuBIcIGCtzIdPXNV0NYG
         config:
           files: |
             config.yaml: |
@@ -49,7 +46,6 @@ stages:
               auth:
                 jwt:
                   domain: ci.estafette.io
-                  key: zyx9YAmK8cSPdf2K
               apiServer:
                 baseURL: https://ci.estafette.io
                 integrationsURL: https://ci-webhooks.estafette.io

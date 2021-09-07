@@ -61,7 +61,6 @@ db-migrator:
       - name: client-certificate
         mountPath: /cockroach-certs
 
-
 # https://github.com/estafette/estafette-ci-cron-event-sender/blob/main/helm/estafette-ci-cron-event-sender/values.yaml
 cron-event-sender:
   enabled: true
@@ -184,7 +183,3 @@ queue:
 
   natsbox:
     enabled: false
-
-# values specific to this umbrella chart
-nameOverride: ""
-fullnameOverride: ""

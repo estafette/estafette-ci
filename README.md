@@ -14,30 +14,31 @@ First add the `estafette` helm repository with
 helm repo add estafette https://helm.estafette.io
 ```
 
+Then create the following `my-values.yaml` file:
+
+```yaml
+api:
+  config:
+    files: |
+      config.yaml: |
+        apiServer:
+          baseURL: https://estafette-ci.mydomain.com
+          integrationsURL: https://estafette-ci-webhooks.mydomain.com
+
+        auth:
+          jwt:
+            domain: estafette-ci.mydomain.com
+```
+
 Then install the `estafette-ci` chart with
 
 ```
-helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --timeout 600s
-```
-
-With Estafette CI making use of CockroachDB in **secure mode** you need to approve one or more _certificate signing requests_ by doing the following while the installation runs (and before it times out):
-
-```
-kubectl get csr
-```
-
-You will see one or more csr's and will have to approve this with (for example):
-
-```
-kubectl certificate approve estafette-ci.client.root
-kubectl certificate approve estafette-ci.node.estafette-ci-db-0
-kubectl certificate approve estafette-ci.node.estafette-ci-db-1
-kubectl certificate approve estafette-ci.node.estafette-ci-db-2
+helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --values my-values.yaml --timeout 600s
 ```
 
 # Configuration
 
-In order to get things to run correctly you'll have pass configuration to the `helm install/upgrade` command by passing `-f my-values.yaml`.
+In order to get things to run as desired you'll have pass configuration to the `helm install/upgrade` command by passing `--values my-values.yaml`.
 
 ## Database
 
@@ -76,11 +77,11 @@ api:
       config.yaml: |
         apiServer:
           baseURL: https://estafette-ci.mydomain.com
+          integrationsURL: https://estafette-ci-webhooks.mydomain.com
 
         auth:
           jwt:
             domain: estafette-ci.mydomain.com
-            key: <some random generated string>
           administrators:
           - <your email>
           organizations:
@@ -90,10 +91,6 @@ api:
               clientID: <a google aouth credential client id>
               clientSecret: <a google aouth credential client id>
               allowedIdentitiesRegex: <a regular expression to limit access to users of your domain, let's say .+@mydomain\.com>
-
-        database:
-          databaseName: defaultdb
-          user: root
 
         credentials:
         - name: container-registry-estafette
@@ -122,16 +119,32 @@ api:
               name: estafette-ci-web
               port:
                 name: http
+
+  ingressWebhooks:
+    enabled: true
+    hosts:
+      - host: estafette-ci-webhooks.mydomain.com
+        paths:
+        - path: /api/integrations/github
+          pathType: Prefix
+          backend:
+            service:
+              name: estafette-ci-api
+              port:
+                name: http
+        - path: /api/integrations/bitbucket
+          pathType: Prefix
+          backend:
+            service:
+              name: estafette-ci-api
+              port:
+                name: http
 ```
 
 For more information on configurating the _estafette-ci-api_ Helm chart check its [values file](https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml).
 
 # TODO
 
-- create users in cockroachdb and client certificates
-- add estafette-ci-db-migrator
-- set more sensible defaults in estafette config so less needs to be passed
-- add estafette-ci-cron-event-sender and allow pre-creation of a client id through config
 - allow for login-less usage to just test estafette
 - document how to set up github/bitbucket integration, or somehow automate this
 - disable jaeger by default
