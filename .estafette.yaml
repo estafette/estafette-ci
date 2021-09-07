@@ -35,8 +35,16 @@ stages:
         timeoutSeconds: 120
     image: extensions/helm:dev
     action: test
-    timeout: 240s
+    # timeout: 240s
     values: |-
+      api:
+        secret:
+          enabled: true
+
+          files:
+            # the aes-256 key to encrypt/decrypt estafette secrets
+            secretDecryptionKey: 1PsvXVOMkhfAQuBIcIGCtzIdPXNV0NYG
+
       db:
         storage:
           persistentVolume:
