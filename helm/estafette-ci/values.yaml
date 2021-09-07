@@ -4,15 +4,29 @@ api:
   deployment:
     extraVolumes: |
       - name: client-certificate
-        secret:
-          secretName: estafette-ci-db-client-secret
-          defaultMode: 384
+        projected:
+          sources:
+          - secret:
+              name: estafette-ci-db-client-secret
+              items:
+              - key: ca.crt
+                path: ca.crt
+                mode: 256
+              - key: tls.crt
+                path: cert
+                mode: 256
+              - key: tls.key
+                path: key
+                mode: 256
     extraVolumeMounts: |
       - name: client-certificate
         mountPath: /cockroach-certs
   config:
     enabled: true
     files: |
+      config.yaml: |
+        database:
+          certificateAuthorityPath: /cockroach-certs/ca.crt
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web:
@@ -22,14 +36,28 @@ web:
 db-migrator:
   enabled: true
   job:
+    env:
+      SSL_CA_PATH: /cockroach-certs/ca.crt
     extraVolumes: |
       - name: client-certificate
-        secret:
-          secretName: estafette-ci-db-client-secret
-          defaultMode: 384
+        projected:
+          sources:
+          - secret:
+              name: estafette-ci-db-client-secret
+              items:
+              - key: ca.crt
+                path: ca.crt
+                mode: 256
+              - key: tls.crt
+                path: cert
+                mode: 256
+              - key: tls.key
+                path: key
+                mode: 256
     extraVolumeMounts: |
       - name: client-certificate
         mountPath: /cockroach-certs
+
 
 # https://github.com/estafette/estafette-ci-cron-event-sender/blob/main/helm/estafette-ci-cron-event-sender/values.yaml
 cron-event-sender:
@@ -38,10 +66,10 @@ cron-event-sender:
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   enabled: true
-  # clients:
-  # - root
-  # - api
-  # - migrator
+  clients:
+  - root
+  - api
+  - migrator
   statefulset:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
