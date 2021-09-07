@@ -46,6 +46,12 @@ stages:
             secretDecryptionKey: 1PsvXVOMkhfAQuBIcIGCtzIdPXNV0NYG
 
       db:
+        conf:
+          single-node: true
+
+        statefulset:
+          replicas: 1
+
         storage:
           persistentVolume:
             enabled: false
