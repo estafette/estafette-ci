@@ -39,19 +39,26 @@ stages:
     values: |-
       api:
         secret:
-          enabled: true
-
           files:
-            # the aes-256 key to encrypt/decrypt estafette secrets
             secretDecryptionKey: 1PsvXVOMkhfAQuBIcIGCtzIdPXNV0NYG
+        config:
+          files: |
+            config.yaml: |
+              database:
+                certificateAuthorityPath: /cockroach-certs/ca.crt
+              auth:
+                jwt:
+                  domain: ci.estafette.io
+                  key: zyx9YAmK8cSPdf2K
+              apiServer:
+                baseURL: https://ci.estafette.io
+                integrationsURL: https://ci-webhooks.estafette.io
 
       db:
         conf:
           single-node: true
-
         statefulset:
           replicas: 1
-
         storage:
           persistentVolume:
             enabled: false
