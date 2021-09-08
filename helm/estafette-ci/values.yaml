@@ -1,26 +1,6 @@
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api:
   enabled: true
-  deployment:
-    extraVolumes: |
-      - name: client-certificate
-        projected:
-          sources:
-          - secret:
-              name: estafette-ci-db-client-secret
-              items:
-              - key: ca.crt
-                path: ca.crt
-                mode: 256
-              - key: tls.crt
-                path: tls.crt
-                mode: 256
-              - key: tls.key
-                path: tls.key
-                mode: 256
-    extraVolumeMounts: |
-      - name: client-certificate
-        mountPath: /cockroach-certs
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web:
@@ -29,26 +9,6 @@ web:
 # https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
 db-migrator:
   enabled: true
-  job:
-    extraVolumes: |
-      - name: client-certificate
-        projected:
-          sources:
-          - secret:
-              name: estafette-ci-db-client-secret
-              items:
-              - key: ca.crt
-                path: ca.crt
-                mode: 256
-              - key: tls.crt
-                path: tls.crt
-                mode: 256
-              - key: tls.key
-                path: tls.key
-                mode: 256
-    extraVolumeMounts: |
-      - name: client-certificate
-        mountPath: /cockroach-certs
 
 # https://github.com/estafette/estafette-ci-cron-event-sender/blob/main/helm/estafette-ci-cron-event-sender/values.yaml
 cron-event-sender:
