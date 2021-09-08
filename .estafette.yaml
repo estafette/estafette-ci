@@ -38,17 +38,8 @@ stages:
     timeout: 240s
     values: |-
       api:
-        config:
-          files: |
-            config.yaml: |
-              database:
-                certificateAuthorityPath: /cockroach-certs/ca.crt
-              auth:
-                jwt:
-                  domain: ci.estafette.io
-              apiServer:
-                baseURL: https://ci.estafette.io
-                integrationsURL: https://ci-webhooks.estafette.io
+        baseHost: ci-test.estafette.io
+        integrationsHost: ci-test-integration.estafette.io
 
       db:
         conf:

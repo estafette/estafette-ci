@@ -1,6 +1,7 @@
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api:
   enabled: true
+
   deployment:
     extraVolumes: |
       - name: client-certificate
@@ -13,20 +14,14 @@ api:
                 path: ca.crt
                 mode: 256
               - key: tls.crt
-                path: cert
+                path: tls.crt
                 mode: 256
               - key: tls.key
-                path: key
+                path: tls.key
                 mode: 256
     extraVolumeMounts: |
       - name: client-certificate
         mountPath: /cockroach-certs
-  config:
-    enabled: true
-    files: |
-      config.yaml: |
-        database:
-          certificateAuthorityPath: /cockroach-certs/ca.crt
 
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web:
@@ -37,8 +32,6 @@ db-migrator:
   enabled: true
   job:
     env:
-    - name: SSL_CA_PATH
-      value: /cockroach-certs/ca.crt
     - name: WAIT_SECONDS
       value: "30"
     extraVolumes: |
@@ -52,10 +45,10 @@ db-migrator:
                 path: ca.crt
                 mode: 256
               - key: tls.crt
-                path: cert
+                path: tls.crt
                 mode: 256
               - key: tls.key
-                path: key
+                path: tls.key
                 mode: 256
     extraVolumeMounts: |
       - name: client-certificate
@@ -68,10 +61,6 @@ cron-event-sender:
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   enabled: true
-  clients:
-  - root
-  - api
-  - migrator
   statefulset:
     env:
     - name: COCKROACH_SKIP_ENABLING_DIAGNOSTIC_REPORTING
