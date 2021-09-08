@@ -1,7 +1,6 @@
 # https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
 api:
   enabled: true
-
   deployment:
     extraVolumes: |
       - name: client-certificate
@@ -31,9 +30,6 @@ web:
 db-migrator:
   enabled: true
   job:
-    env:
-    - name: WAIT_SECONDS
-      value: "30"
     extraVolumes: |
       - name: client-certificate
         projected:
