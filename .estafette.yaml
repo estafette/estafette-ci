@@ -106,6 +106,12 @@ releases:
         release: estafette-ci
         timeout: 300s
         values: |-
+          api:
+            enabled: false
+
+          web:
+            enabled: false
+
           db:
             enabled: true
             image:
@@ -177,17 +183,15 @@ releases:
               clientId: estafette.secret(0PFiczIZHfUVzimV.LjGbDOQoYhftsEQAAULSn73GYVz15Vr545C92M0wjzfsiHvOnlqVJGEXY5XztJN5oaJusMz_yTgbuneDFVJ7xjRZAGnuCpyv4FQCxnYZjWvJqJ4UWRbDvg==.fGrdU6R4fkay6VNcX1mCyKrXZkjj8ETm78Wu3o4jwzKyBsHGVInLW1R0GiRBjA3rWA==)
               clientSecret: estafette.secret(_C6wTHA-5WAE4sls.LZyDR1hBPyC4ip6JrI68VA5pogCEphD6gU0bqYRn5M6VJwPWFP_oBw==.L5_CHkpqfwm-ruXYm4O5XDQrpBfP9zHlsAKldUvBNSnzrHk5L3nfxb_NOrNa4-V2qA==)
 
-          api:
-            enabled: false
-
-          web:
-            enabled: false
+          cron-event-sender:
+            enabled: true
 
           db-migrator:
-            enabled: false
-
-          cron-event-sender:
-            enabled: false
+            enabled: true
+            job:
+              env:
+              - name: DB_DATABASE
+                value: estafette.secret(CcRu_ak2gXtQkAW5.43_WP9s_WKFBoFCLCgq-8_GCyU-tFHI66xfuVF6Q4eA=.4WXWNsg4ArZLkhyHJh-v_HIczgBMjDypiefBAA3GUPjN0H0uqPEdmzQP7ADHQ5zTsQ==)
 
           metrics:
             enabled: true
