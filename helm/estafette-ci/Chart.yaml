@@ -5,7 +5,7 @@ name: estafette-ci
 version: 0.1.0
 dependencies:
 - name: estafette-ci-api
-  version: 1.0.7
+  version: 1.0.8-main-1951
   repository: https://helm.estafette.io/
   alias: api
   condition: api.enabled
@@ -15,12 +15,12 @@ dependencies:
   alias: web
   condition: web.enabled
 - name: estafette-ci-db-migrator
-  version: 1.0.6
+  version: 1.0.7-main-238
   repository: https://helm.estafette.io/
   alias: db-migrator
   condition: db-migrator.enabled
 - name: estafette-ci-cron-event-sender
-  version: 1.0.4
+  version: 1.0.6-main-83
   repository: https://helm.estafette.io/
   alias: cron-event-sender
   condition: cron-event-sender.enabled

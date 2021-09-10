@@ -185,16 +185,61 @@ releases:
 
           cron-event-sender:
             enabled: true
+
             logFormat: v3
+
+            extraEnv:
+              - name: "JAEGER_AGENT_HOST"
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.hostIP
+              - name: "JAEGER_SAMPLER_MANAGER_HOST_PORT"
+                value: "http://$(JAEGER_AGENT_HOST):5778/sampling"
+              - name: "JAEGER_SAMPLER_PARAM"
+                value: "0.5"
+              - name: "JAEGER_SAMPLER_TYPE"
+                value: "probabilistic"
+              - name: "JAEGER_SERVICE_NAME"
+                value: "estafette-ci-cron-event-sender"
+
+            image:
+              credentials:
+                registry: docker.io
+                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 10
+                  preference:
+                    matchExpressions:
+                    - key: cloud.google.com/gke-preemptible
+                      operator: In
+                      values:
+                      - "true"
+
+            tolerations:
+            - key: cloud.google.com/gke-preemptible
+              operator: Equal
+              value: "true"
+              effect: NoSchedule
 
           db-migrator:
             enabled: true
+
+            logFormat: v3
+
             job:
-              env:
-              - name: DB_DATABASE
-                value: estafette.secret(CcRu_ak2gXtQkAW5.43_WP9s_WKFBoFCLCgq-8_GCyU-tFHI66xfuVF6Q4eA=.4WXWNsg4ArZLkhyHJh-v_HIczgBMjDypiefBAA3GUPjN0H0uqPEdmzQP7ADHQ5zTsQ==)
-              - name: ESTAFETTE_LOG_FORMAT
-                value: v3
+              extraEnv:
+                - name: DB_DATABASE
+                  value: estafette.secret(CcRu_ak2gXtQkAW5.43_WP9s_WKFBoFCLCgq-8_GCyU-tFHI66xfuVF6Q4eA=.4WXWNsg4ArZLkhyHJh-v_HIczgBMjDypiefBAA3GUPjN0H0uqPEdmzQP7ADHQ5zTsQ==)
+
+            image:
+              credentials:
+                registry: docker.io
+                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
 
           metrics:
             enabled: true
