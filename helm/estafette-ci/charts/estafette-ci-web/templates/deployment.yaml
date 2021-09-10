@@ -1,0 +1,116 @@
+{{- $fullName := include "estafette-ci-web.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "estafette-ci-web.fullname" . }}
+  labels:
+    {{- include "estafette-ci-web.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.deployment.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "estafette-ci-web.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.deployment.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "estafette-ci-web.selectorLabels" . | nindent 8 }}
+        {{- range $key, $value := .Values.deployment.extraPodLabels }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+    spec:
+      {{- if or .Values.image.credentials .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- if .Values.image.credentials }}
+        - name: {{ template "cockroachdb.fullname" . }}.registry
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "estafette-ci-web.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.deployment.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: http
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- if or .Values.deployment.extraVolumeMounts .Values.extraConfigmaps .Values.extraSecrets }}
+          volumeMounts:
+          {{- range .Values.extraConfigmaps }}
+          {{- if .mountPath }}
+          - name: configs-{{ .key }}
+            mountPath: {{ .mountPath }}
+          {{- end }}
+          {{- end }}
+          {{- range .Values.extraSecrets }}
+          {{- if .mountPath }}
+          - name: secrets-{{ .key }}
+            mountPath: {{ .mountPath }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.deployment.extraVolumeMounts }}
+          {{- tpl . $ | nindent 10 }}
+          {{- end }}
+          {{- end }}
+        {{- with .Values.deployment.extraContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      terminationGracePeriodSeconds: 300
+      {{- if or .Values.deployment.extraVolumes .Values.extraConfigmaps .Values.extraSecrets }}
+      volumes:
+      {{- range .Values.extraConfigmaps }}
+      {{- if .mountPath }}
+      - name: configs-{{ .key }}
+        configMap: 
+          name: {{ $fullName }}.{{ .key }}
+      {{- end }}
+      {{- end }}
+      {{- range .Values.extraSecrets }}
+      {{- if .mountPath }}
+      - name: secrets-{{ .key }}
+        secret:
+          secretName: {{ $fullName }}.{{ .key }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.deployment.extraVolumes }}
+      {{- tpl . $ | nindent 6 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

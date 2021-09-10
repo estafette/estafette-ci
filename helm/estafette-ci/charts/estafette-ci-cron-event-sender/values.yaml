@@ -1,0 +1,109 @@
+# Default values for estafette-ci-cron-event-sender.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# APPLICATION SETTINGS
+#
+
+config:
+  # queue servers to publish to
+  queueHosts:
+  - estafette-ci-queue-0.estafette-ci-queue
+  # subject to publish to
+  queueSubject: event.cron
+
+cronjob:
+  schedule: '* * * * *'
+  concurrencypolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  suspend: false
+
+  completions: 1
+  parallelism: 1
+  backoffLimit: 6
+
+  restartPolicy: OnFailure
+
+# the following log formats are available: plaintext, console, json, stackdriver, v3 (see https://github.com/estafette/estafette-foundation for more info)
+logFormat: json
+
+# the following levels and upwards will be logged: disabled, trace, debug, info, warn, error, fatal, panic (see https://github.com/estafette/estafette-foundation for more info)
+logLevel: debug
+
+#
+# GENERIC SETTINGS
+#
+
+replicaCount: 1
+
+image:
+  repository: estafette/estafette-ci-cron-event-sender
+  # The tag can be set to override the appVersion getting used as the image tag
+  tag:
+  pullPolicy: IfNotPresent
+  credentials: {}
+    # registry: docker.io
+    # username: john_doe
+    # password: changeme
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+rbac:
+  # Specifies whether roles and bindings should be created
+  enable: true
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # requests:
+  #   cpu: 50m
+  #   memory: 250Mi
+  # limits:
+  #   cpu: 400m
+  #   memory: 800Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+  # nodeAffinity:
+  #   preferredDuringSchedulingIgnoredDuringExecution:
+  #   - weight: 10
+  #     preference:
+  #       matchExpressions:
+  #       - key: cloud.google.com/gke-preemptible
+  #         operator: In
+  #         values:
+  #         - "true"
+
+# pass (additional) arguments to the container
+extraArgs: []
+
+# use to set extra environment variables
+extraEnv: []
+
+# use to add extra labels
+extraLabels: {}
+
+# use to add extra labels to podspec for getting their values in prometheus
+extraPodLabels: {}

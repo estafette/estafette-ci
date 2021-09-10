@@ -1,0 +1,103 @@
+{{- $fullName := include "estafette-ci-db-migrator.fullname" . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "estafette-ci-db-migrator.fullname" . }}
+  labels:
+    {{- include "estafette-ci-db-migrator.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    # This will delete job after succeeded
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      {{- with .Values.job.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "estafette-ci-db-migrator.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      {{- if or .Values.image.credentials .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- if .Values.image.credentials }}
+        - name: {{ template "estafette-ci-db-migrator.fullname" . }}.registry
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "estafette-ci-db-migrator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.job.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.job.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "ESTAFETTE_LOG_FORMAT"
+              value: "{{ .Values.logFormat }}"
+            - name: "ESTAFETTE_LOG_LEVEL"
+              value: "{{ .Values.logLevel }}"
+          {{- with .Values.job.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.job.resources | nindent 12 }}
+          {{- if or .Values.job.extraVolumeMounts .Values.extraConfigmaps .Values.extraSecrets }}
+          volumeMounts:
+          {{- range .Values.extraConfigmaps }}
+          {{- if .mountPath }}
+          - name: configs-{{ .key }}
+            mountPath: {{ .mountPath }}
+          {{- end }}
+          {{- end }}
+          {{- range .Values.extraSecrets }}
+          {{- if .mountPath }}
+          - name: secrets-{{ .key }}
+            mountPath: {{ .mountPath }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.job.extraVolumeMounts }}
+          {{- tpl . $ | nindent 10 }}
+          {{- end }}
+          {{- end }}
+        {{- with .Values.job.extraContainers }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}
+      {{- if or .Values.job.extraVolumes .Values.extraConfigmaps .Values.extraSecrets }}
+      volumes:
+      {{- range .Values.extraConfigmaps }}
+      {{- if .mountPath }}
+      - name: configs-{{ .key }}
+        configMap: 
+          name: {{ $fullName }}.{{ .key }}
+      {{- end }}
+      {{- end }}
+      {{- range .Values.extraSecrets }}
+      {{- if .mountPath }}
+      - name: secrets-{{ .key }}
+        secret:
+          secretName: {{ $fullName }}.{{ .key }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.job.extraVolumes }}
+      {{- tpl . $ | nindent 6 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.job.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.job.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.job.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

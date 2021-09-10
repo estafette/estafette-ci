@@ -1,0 +1,75 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "estafette-ci-cron-event-sender.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "estafette-ci-cron-event-sender.labels" . | indent 4 }}
+spec:
+  schedule: '{{ .Values.cronjob.schedule }}'
+  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
+  suspend: {{ .Values.cronjob.suspend }}
+  jobTemplate:
+    spec:
+      completions: {{ .Values.cronjob.completions }}
+      parallelism: {{ .Values.cronjob.parallelism }}
+      backoffLimit: {{ .Values.cronjob.backoffLimit }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ include "estafette-ci-cron-event-sender.name" . }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+            {{- if .Chart.AppVersion }}
+            app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.extraPodLabels }}
+            {{ $key }}: {{ $value }}
+            {{- end }}
+        spec:
+          {{- if .Values.image.credentials }}
+          imagePullSecrets:
+          - name: {{ template "estafette-ci-cron-event-sender.fullname" . }}.registry
+          {{- end }}
+          serviceAccountName: {{ template "estafette-ci-cron-event-sender.serviceAccountName" . }}
+          restartPolicy: {{ .Values.cronjob.restartPolicy }}
+          securityContext:
+            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ .Chart.Name }}
+              securityContext:
+                {{- toYaml .Values.securityContext | nindent 16 }}
+              image: "{{ .Values.image.repository }}:{{ template "estafette-ci-cron-event-sender.imageTag" . }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              {{- with .Values.extraArgs }}
+              args:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              env:
+                - name: "ESTAFETTE_LOG_FORMAT"
+                  value: "{{ .Values.logFormat }}"
+                - name: "ESTAFETTE_LOG_LEVEL"
+                  value: "{{ .Values.logLevel }}"
+                - name: "QUEUE_HOSTS"
+                  value: "{{ join `,` .Values.config.queueHosts }}"
+                - name: "QUEUE_SUBJECT"
+                  value: "{{ .Values.config.queueSubject }}"
+              {{- with .Values.extraEnv }}
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          terminationGracePeriodSeconds: 300
+          {{- with .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- with .Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}

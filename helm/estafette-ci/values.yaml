@@ -2,25 +2,17 @@
 api:
   enabled: true
 
-  logFormat: json
-
 # https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
 web:
   enabled: true
-
-  logFormat: json
 
 # https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
 db-migrator:
   enabled: true
 
-  logFormat: json
-
 # https://github.com/estafette/estafette-ci-cron-event-sender/blob/main/helm/estafette-ci-cron-event-sender/values.yaml
 cron-event-sender:
   enabled: true
-
-  logFormat: json
 
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:

@@ -1,0 +1,127 @@
+image:
+  repository: estafette/estafette-ci-web
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  credentials: {}
+    # registry: docker.io
+    # username: john_doe
+    # password: changeme
+
+deployment:
+  replicaCount: 1
+
+  env: []
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  podAnnotations: {}
+    # prometheus.io/scrape: 'true'
+    # prometheus.io/path: '/metrics'
+    # prometheus.io/port: '5000'
+    # prometheus.io/scheme: 'http'
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  extraPodLabels: {}
+
+  # specify extra containers as a string, interpreted with tpl; this allows use of helm values.
+  # - name: {{ .Chart.Name }}-sidecar
+  # image: registry/git-sync
+  extraContainers: |
+
+  # specify extra volumes 
+  extraVolumes: |
+
+  # specify extra volume mounts for the main container
+  extraVolumeMounts: |
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+jobNamespaceOverride: ""
+
+extraLabels: {}
+#   team: estafette
+
+extraSecrets: []
+# - key: gcp
+#   annotations: {}
+#   mountPath: /gcp
+#   data:
+#     service-account-key.json: |
+#       {}
+
+extraConfigmaps: []
+# - key: templates
+#   annotations: {}
+#   mountPath: /templates
+#   data: |
+#     manifest-docker.tmpl: |
+#       labels:
+#         container: {{.ContainerName}}
+#         team: {{.TeamName}}
+#         language: docker
+
+#       stages:
+#         bake:
+#           image: extensions/docker:stable
+#           action: build
+#           repositories:
+#           - estafette
+
+#         push-to-docker-registry:
+#           image: extensions/docker:stable
+#           action: push
+#           repositories:
+#           - estafette
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+    # cloud.google.com/neg: '{"ingress": true}'
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+pdb:
+  enabled: true
+  maxUnavailable: 1
