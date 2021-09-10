@@ -28,19 +28,15 @@ icon: https://helm.estafette.io/icon.png
 
 dependencies:
 - name: estafette-ci-api
-  version: 1.0.9
   alias: api
   condition: api.enabled
 - name: estafette-ci-web
-  version: 1.0.6
   alias: web
   condition: web.enabled
 - name: estafette-ci-db-migrator
-  version: 1.0.7
   alias: db-migrator
   condition: db-migrator.enabled
 - name: estafette-ci-cron-event-sender
-  version: 1.0.6
   alias: cron-event-sender
   condition: cron-event-sender.enabled
 
