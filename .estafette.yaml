@@ -86,15 +86,6 @@ releases:
       create-github-release:
         image: extensions/github-release:dev
 
-  helm-diff:
-    stages:
-      diff:
-        image: extensions/helm:dev
-        credentials: gke-tooling
-        action: diff
-        tillerless: true
-        namespace: estafette-ci
-
   tooling-estafette:
     actions:
     - name: diff

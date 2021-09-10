@@ -1,7 +1,7 @@
 image:
   repository: estafette/estafette-ci-web
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # Overrides the image tag whose default is the chart version.
   tag: ""
   credentials: {}
     # registry: docker.io

@@ -17,32 +17,26 @@ type: application
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.1.0
 
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "1.16.0"
-
 home: https://helm.estafette.io
 icon: https://helm.estafette.io/icon.png
 
 dependencies:
 - name: estafette-ci-api
-  version: 0.1.0
+  version: ^1
   alias: api
   condition: api.enabled
-- name: estafette-ci-web
-  version: 0.1.0
-  alias: web
-  condition: web.enabled
-- name: estafette-ci-db-migrator
-  version: 0.1.0
-  alias: db-migrator
-  condition: db-migrator.enabled
 - name: estafette-ci-cron-event-sender
-  version: 0.1.0
+  version: ^1
   alias: cron-event-sender
   condition: cron-event-sender.enabled
+- name: estafette-ci-db-migrator
+  version: ^1
+  alias: db-migrator
+  condition: db-migrator.enabled
+- name: estafette-ci-web
+  version: ^1
+  alias: web
+  condition: web.enabled
 
 - name: cockroachdb
   version: 6.1.0

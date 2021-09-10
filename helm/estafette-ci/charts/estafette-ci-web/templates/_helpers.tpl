@@ -36,8 +36,8 @@ Common labels
 {{- define "estafette-ci-web.labels" -}}
 helm.sh/chart: {{ include "estafette-ci-web.chart" . }}
 {{ include "estafette-ci-web.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- if .Chart.Version }}
+app.kubernetes.io/version: {{ .Chart.Version | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- range $key, $value := .Values.extraLabels }}

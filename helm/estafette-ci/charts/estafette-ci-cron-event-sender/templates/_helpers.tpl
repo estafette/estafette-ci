@@ -38,8 +38,8 @@ Common labels
 app.kubernetes.io/name: {{ include "estafette-ci-cron-event-sender.name" . }}
 helm.sh/chart: {{ include "estafette-ci-cron-event-sender.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- if .Chart.Version }}
+app.kubernetes.io/version: {{ .Chart.Version | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- range $key, $value := .Values.extraLabels }}
@@ -62,5 +62,5 @@ Create the name of the service account to use
 Create the tag of the image to use
 */}}
 {{- define "estafette-ci-cron-event-sender.imageTag" -}}
-{{ default .Chart.AppVersion .Values.image.tag }}
+{{ default .Chart.Version .Values.image.tag }}
 {{- end -}}

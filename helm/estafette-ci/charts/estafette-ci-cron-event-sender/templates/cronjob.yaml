@@ -21,8 +21,8 @@ spec:
           labels:
             app.kubernetes.io/name: {{ include "estafette-ci-cron-event-sender.name" . }}
             app.kubernetes.io/instance: {{ .Release.Name }}
-            {{- if .Chart.AppVersion }}
-            app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+            {{- if .Chart.Version }}
+            app.kubernetes.io/version: {{ .Chart.Version | quote }}
             {{- end }}
             {{- range $key, $value := .Values.extraPodLabels }}
             {{ $key }}: {{ $value }}
