@@ -185,6 +185,7 @@ releases:
 
           cron-event-sender:
             enabled: true
+            logFormat: v3
 
           db-migrator:
             enabled: true
@@ -192,6 +193,8 @@ releases:
               env:
               - name: DB_DATABASE
                 value: estafette.secret(CcRu_ak2gXtQkAW5.43_WP9s_WKFBoFCLCgq-8_GCyU-tFHI66xfuVF6Q4eA=.4WXWNsg4ArZLkhyHJh-v_HIczgBMjDypiefBAA3GUPjN0H0uqPEdmzQP7ADHQ5zTsQ==)
+              - name: ESTAFETTE_LOG_FORMAT
+                value: v3
 
           metrics:
             enabled: true
