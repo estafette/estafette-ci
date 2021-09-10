@@ -53,3 +53,11 @@ dependencies:
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
+- name: cert-manager
+  version: v1.5.3
+  repository: https://charts.jetstack.io
+  condition: cert-manager.enabled
+- name: external-dns
+  version: 1.2.0
+  repository: https://kubernetes-sigs.github.io/external-dns/
+  condition: external-dns.enabled

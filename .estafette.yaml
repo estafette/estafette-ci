@@ -103,6 +103,12 @@ releases:
           web:
             enabled: false
 
+          cert-manager:
+            enabled: false
+
+          external-dns:
+            enabled: false
+
           db:
             enabled: true
             image:

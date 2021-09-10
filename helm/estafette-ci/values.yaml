@@ -128,3 +128,11 @@ queue:
 
   natsbox:
     enabled: false
+
+# https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
+cert-manager:
+  enabled: false
+
+# https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/values.yaml
+external-dns:
+  enabled: false
