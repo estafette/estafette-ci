@@ -9,7 +9,7 @@ image:
     # password: changeme
 
 deployment:
-  replicaCount: 1
+  replicaCount: 3
 
   env: []
 
@@ -117,9 +117,9 @@ service:
     # cloud.google.com/neg: '{"ingress": true}'
 
 autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
   targetCPUUtilizationPercentage: 80
 
 pdb:
