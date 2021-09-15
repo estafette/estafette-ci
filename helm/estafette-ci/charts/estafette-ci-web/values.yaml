@@ -9,7 +9,7 @@ image:
     # password: changeme
 
 deployment:
-  replicaCount: 3
+  replicaCount: 1
 
   env: []
 

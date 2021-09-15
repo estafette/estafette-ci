@@ -15,7 +15,7 @@ logFormat: json
 logLevel: debug
 
 deployment:
-  replicaCount: 3
+  replicaCount: 1
 
   extraEnv: []
 
@@ -147,6 +147,21 @@ baseHost: estafette.mydomain.com
 # host to receive webhooks from 3rd party integrations like github, bitbucket
 integrationsHost: estafette-integrations.mydomain.com
 
+tls:
+  enabled: true
+  certManager:
+    enabled: false
+    issuer: letsencrypt-prod
+  annotations: {}
+    # to automatically generate and rotate the tls certificate set the following annotations if you make use of estafette-letsencrypt-certificate
+    # estafette.io/letsencrypt-certificate: true
+    # estafette.io/letsencrypt-certificate-hostnames: estafette.mydomain.com,estafette-integrations.mydomain.com
+
+  # if you want to explicitly set a certificate yourself you can do this with the following properties, 
+  # but normally you would use either cert-manager or estafette-letsencrypt-certificate to generate and rotate the certificates
+  # cert:
+  # key:
+
 # ingress to Estafette CI's web ui and api
 ingress:
   enabled: true
@@ -154,7 +169,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: "{{ $.Values.baseHost }}"
+    - host: '{{ $.Values.baseHost }}'
       paths:
       - path: /api/
         pathType: Prefix
@@ -170,10 +185,10 @@ ingress:
             name: estafette-ci-web
             port:
               name: http
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: '{{ include "estafette-ci-api.fullname" . }}.tls'
+      hosts:
+        - '{{ $.Values.baseHost }}'
 
 # optional separate ingress for webhooks if the main ingress is not publicly accessible
 ingressWebhooks:
@@ -182,7 +197,7 @@ ingressWebhooks:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: "{{ $.Values.integrationsHost }}"
+    - host: '{{ $.Values.integrationsHost }}'
       paths:
       - path: /api/integrations/bitbucket
         pathType: Prefix
@@ -219,10 +234,10 @@ ingressWebhooks:
             name: estafette-ci-api
             port:
               name: http
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: '{{ include "estafette-ci-api.fullname" . }}.tls'
+      hosts:
+        - '{{ $.Values.integrationsHost }}'
 
 autoscaling:
   enabled: false

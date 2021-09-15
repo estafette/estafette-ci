@@ -1,0 +1,13 @@
+{{- if and .Values.tls.enabled .Values.tls.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "estafette-ci-api.fullname" . }}
+spec:
+  secretName: {{ include "estafette-ci-api.fullname" . }}.tls
+  issuerRef:
+    name: .Values.tls.certManager.issuer
+  dnsNames:
+  - {{ $.Values.baseHost }}
+  - {{ $.Values.integrationsHost }}
+{{- end }}

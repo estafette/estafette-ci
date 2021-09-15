@@ -6,7 +6,8 @@ See https://estafette.io for more information regarding the Estafette CI project
 
 # Installation
 
-In order to give Estafette CI a test drive you can install it using the Helm chart.
+_Estafette CI_ can easily be installed using [Helm](https://helm.sh/).
+
 
 First add the `estafette` helm repository with
 
@@ -14,137 +15,30 @@ First add the `estafette` helm repository with
 helm repo add estafette https://helm.estafette.io
 ```
 
-Then create the following `my-values.yaml` file:
+Although Estafette aims to have as little configuration as possible by using sane defaults the Helm chart still needs a couple of values to be set. To do so create a `values.yaml` file with the following content:
 
 ```yaml
 api:
-  config:
-    files: |
-      config.yaml: |
-        apiServer:
-          baseURL: https://estafette-ci.mydomain.com
-          integrationsURL: https://estafette-ci-webhooks.mydomain.com
+  baseHost: '<(private) host for the web gui>'
+  integrationsHost: '<public host to receive webhooks>'
+```
 
-        auth:
-          jwt:
-            domain: estafette-ci.mydomain.com
+Create a namespace with
+
+```
+kubectl create namespace estafette-ci
 ```
 
 Then install the `estafette-ci` chart with
 
 ```
-helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --values my-values.yaml --timeout 600s
+helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --values values.yaml --timeout 600s
 ```
 
-# Configuration
+This should get all parts up and running, you can check with:
 
-In order to get things to run as desired you'll have pass configuration to the `helm install/upgrade` command by passing `--values my-values.yaml`.
-
-## Database
-
-To configure the _CockroachDB_ cluster set the following in `my-values.yaml`:
-
-```yaml
-db:
-  statefulset:
-    replicas: 3
-  storage:
-    persistentVolume:
-      enabled: true
-      size: 50Gi
-  ingress:
-    enabled: true
-    paths: ['/']
-    hosts:
-    - estafette-ci-db.mydomain.com
+```
+watch kubectl get svc,ing,deploy,sts,po -n estafette-ci
 ```
 
-For more information on configuring the _CockroachDB_ helm chart take a look at its [values file](https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml).
-
-## Api & web ui
-
-To configure the api part and access to the web ui add the following to `my-values.yaml`:
-
-```yaml
-api:
-  secret:
-    files:
-      # the aes-256 key to encrypt/decrypt estafette secrets
-      secretDecryptionKey: <generate a 256 bit encryption key, it's used to encrypt estafette secrets>
-
-  config:
-    files: |
-      config.yaml: |
-        apiServer:
-          baseURL: https://estafette-ci.mydomain.com
-          integrationsURL: https://estafette-ci-webhooks.mydomain.com
-
-        auth:
-          jwt:
-            domain: estafette-ci.mydomain.com
-          administrators:
-          - <your email>
-          organizations:
-          - name: <an organization name you can decide on yourself>
-            oauthProviders:
-            - name: google
-              clientID: <a google aouth credential client id>
-              clientSecret: <a google aouth credential client id>
-              allowedIdentitiesRegex: <a regular expression to limit access to users of your domain, let's say .+@mydomain\.com>
-
-        credentials:
-        - name: container-registry-estafette
-          type: container-registry
-          repository: <your docker hub or gcr registry>
-          private: false
-          username: <username for accessing the docker registry>
-          password: <access token for accessing the docker registry>
-
-  ingress:
-    enabled: true
-    hosts:
-      - host: estafette-ci.mydomain.com
-        paths:
-        - path: /api/
-          pathType: Prefix
-          backend:
-            service:
-              name: estafette-ci-api
-              port:
-                name: http
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: estafette-ci-web
-              port:
-                name: http
-
-  ingressWebhooks:
-    enabled: true
-    hosts:
-      - host: estafette-ci-webhooks.mydomain.com
-        paths:
-        - path: /api/integrations/github
-          pathType: Prefix
-          backend:
-            service:
-              name: estafette-ci-api
-              port:
-                name: http
-        - path: /api/integrations/bitbucket
-          pathType: Prefix
-          backend:
-            service:
-              name: estafette-ci-api
-              port:
-                name: http
-```
-
-For more information on configurating the _estafette-ci-api_ Helm chart check its [values file](https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml).
-
-# TODO
-
-- allow for login-less usage to just test estafette
-- document how to set up github/bitbucket integration, or somehow automate this
-- disable jaeger by default
+For more details on how to install and configure Estafette read the documentation at https://estafette.io/getting-started/installation/.
