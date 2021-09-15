@@ -225,7 +225,7 @@ ingressWebhooks:
   #      - chart-example.local
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 3
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
