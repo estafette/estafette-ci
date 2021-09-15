@@ -1,16 +1,16 @@
-# https://github.com/estafette/estafette-ci-api/blob/main/helm/estafette-ci-api/values.yaml
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-api/values.yaml
 api:
   enabled: true
 
-# https://github.com/estafette/estafette-ci-web/blob/main/helm/estafette-ci-web/values.yaml
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-web/values.yaml
 web:
   enabled: true
 
-# https://github.com/estafette/estafette-ci-db-migrator/blob/main/helm/estafette-ci-db-migrator/values.yaml
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-db-migrator/values.yaml
 db-migrator:
   enabled: true
 
-# https://github.com/estafette/estafette-ci-cron-event-sender/blob/main/helm/estafette-ci-cron-event-sender/values.yaml
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-cron-event-sender/values.yaml
 cron-event-sender:
   enabled: true
 
