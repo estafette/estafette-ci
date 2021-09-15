@@ -155,7 +155,7 @@ tls:
   annotations: {}
     # to automatically generate and rotate the tls certificate set the following annotations if you make use of estafette-letsencrypt-certificate
     # estafette.io/letsencrypt-certificate: true
-    # estafette.io/letsencrypt-certificate-hostnames: estafette.mydomain.com,estafette-integrations.mydomain.com
+    # estafette.io/letsencrypt-certificate-hostnames: '{{ $.Values.baseHost }},{{ $.Values.integrationsHost }}'
 
   # if you want to explicitly set a certificate yourself you can do this with the following properties, 
   # but normally you would use either cert-manager or estafette-letsencrypt-certificate to generate and rotate the certificates
