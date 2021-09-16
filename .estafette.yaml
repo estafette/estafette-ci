@@ -128,7 +128,7 @@ releases:
                 prometheus.io/scheme: "https"
               resources:
                 requests:
-                  cpu: 7000m
+                  cpu: 14000m
                   memory: 16Gi
                 limits:
                   memory: 16Gi
