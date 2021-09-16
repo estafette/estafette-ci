@@ -129,9 +129,9 @@ releases:
               resources:
                 requests:
                   cpu: 5000m
-                  memory: 12Gi
+                  memory: 16Gi
                 limits:
-                  memory: 12Gi
+                  memory: 16Gi
               tolerations:
               - effect: NoSchedule
                 key: cloud.google.com/gke-preemptible
