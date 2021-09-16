@@ -162,7 +162,7 @@ releases:
                 estafette.io/cloudflare-dns: "true"
                 estafette.io/cloudflare-proxy: "false"
                 estafette.io/cloudflare-hostnames: "estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)"
-              paths: ['/*']
+              paths: ['/']
               hosts:
               - estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)
               tls:
