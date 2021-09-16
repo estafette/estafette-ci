@@ -95,7 +95,7 @@ releases:
         image: extensions/helm:dev
         namespace: estafette-ci
         release: estafette-ci
-        timeout: 300s
+        timeout: 600s
         values: |-
           api:
             enabled: false
