@@ -112,6 +112,8 @@ releases:
           db:
             enabled: true
             image:
+              # temporarily set tag to already upgraded version that can't be rolled back until a newer version is out
+              tag: v21.1.8
               credentials:
                 registry: docker.io
                 username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
