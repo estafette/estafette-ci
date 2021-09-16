@@ -119,8 +119,6 @@ releases:
             conf:
               locality: continent=europe,country=belgium,region=europe-west1
             statefulset:
-              updateStrategy:
-                type: OnDelete
               annotations:
                 prometheus.io/scrape: "true"
                 prometheus.io/path: "/_status/vars"
