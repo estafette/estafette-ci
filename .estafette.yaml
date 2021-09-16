@@ -143,9 +143,7 @@ releases:
                   preference:
                     matchExpressions:
                     - key: cloud.google.com/gke-preemptible
-                      operator: In
-                      values:
-                      - "true"
+                      operator: DoesNotExist
               podAntiAffinity:
                 type: hard
             service:
