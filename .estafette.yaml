@@ -91,11 +91,11 @@ stages:
 
       metrics:
         imagePullSecrets:
-        - estafette-ci-api.registry
+        - name: estafette-ci-api.registry
 
       queue:
         imagePullSecrets:
-        - estafette-ci-api.registry
+        - name: estafette-ci-api.registry
 
   clone-charts-repo:
     image: extensions/git-clone:dev
