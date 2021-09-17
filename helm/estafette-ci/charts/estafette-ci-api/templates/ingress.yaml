@@ -11,9 +11,15 @@ metadata:
   name: {{ include "estafette-ci-api.fullname" . }}
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- if or .Values.ingress.annotations .Values.iap.enabled }}
   annotations:
+  {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.iap.enabled }}
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.allow-http: "false"
+  {{- end }}
   {{- end }}
 spec:
   {{- if .Values.ingress.tls }}
@@ -32,9 +38,17 @@ spec:
       http:
         paths:
           {{- range .paths }}
+          {{- if $.Values.iap.enabled }}
+          - path: '{{ .path }}*'
+          {{- else }}
           - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
+          {{- end }}
+            {{- if .pathType }}
+            {{- if $.Values.iap.enabled }}
+            pathType: ImplementationSpecific
+            {{- else }}
+            pathType: {{ .pathType }}
+            {{- end }}
             {{- end }}
             backend:
               {{- toYaml .backend | nindent 14 }}
