@@ -40,8 +40,39 @@ stages:
       api:
         baseHost: ci-test.estafette.io
         integrationsHost: ci-test-integration.estafette.io
+        image:
+          credentials:
+            registry: docker.io
+            username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+            password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+
+      web:
+        image:
+          credentials:
+            registry: docker.io
+            username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+            password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+
+      db-migrator:
+        image:
+          credentials:
+            registry: docker.io
+            username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+            password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+
+      cron-event-sender:
+        image:
+          credentials:
+            registry: docker.io
+            username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+            password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
 
       db:
+        image:
+          credentials:
+            registry: docker.io
+            username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
+            password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
         conf:
           single-node: true
         statefulset:
@@ -50,6 +81,14 @@ stages:
           persistentVolume:
             enabled: false
             size: 1Gi
+
+      metrics:
+        imagePullSecrets:
+        - name: estafette-ci-api.registry
+
+      queue:
+        imagePullSecrets:
+        - name: estafette-ci-api.registry
 
   clone-charts-repo:
     image: extensions/git-clone:dev
@@ -85,209 +124,3 @@ releases:
 
       create-github-release:
         image: extensions/github-release:dev
-
-  tooling-estafette:
-    actions:
-    - name: diff
-    - name: install
-    stages:
-      deploy:
-        image: extensions/helm:dev
-        namespace: estafette-ci
-        release: estafette-ci
-        timeout: 600s
-        values: |-
-          api:
-            enabled: false
-
-          web:
-            enabled: false
-
-          cert-manager:
-            enabled: false
-
-          external-dns:
-            enabled: false
-
-          db:
-            enabled: true
-            image:
-              # temporarily set tag to already upgraded version that can't be rolled back until a newer version is out
-              tag: v21.1.8
-              credentials:
-                registry: docker.io
-                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
-                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
-            conf:
-              locality: continent=europe,country=belgium,region=europe-west1
-            statefulset:
-              annotations:
-                prometheus.io/scrape: "true"
-                prometheus.io/path: "/_status/vars"
-                prometheus.io/port: "8080"
-                prometheus.io/scheme: "https"
-              resources:
-                requests:
-                  cpu: 14000m
-                  memory: 48Gi
-                limits:
-                  memory: 48Gi
-              tolerations:
-              - effect: NoSchedule
-                key: cloud.google.com/gke-preemptible
-                operator: Equal
-                value: "true"
-              nodeAffinity:
-                preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 10
-                  preference:
-                    matchExpressions:
-                    - key: cloud.google.com/gke-preemptible
-                      operator: DoesNotExist
-              podAntiAffinity:
-                type: hard
-            service:
-              public:
-                type: NodePort
-                annotations:
-                  prometheus.io/probe: "true"
-                  prometheus.io/probe-path: "/health"
-                  cloud.google.com/neg: '{"ingress": true}'
-              discovery:
-                annotations:
-                  prometheus.io/scheme: "https"
-            ingress:
-              enabled: true
-              annotations:
-                estafette.io/cloudflare-dns: "true"
-                estafette.io/cloudflare-proxy: "false"
-                estafette.io/cloudflare-hostnames: "estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)"
-              paths:
-              - '/*'
-              hosts:
-              - estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)
-              tls:
-              - hosts: [estafette.secret(V1kzfc4YrjfSgEZ_.kWRlE0Yzd7Ople7Mog_tt3yp_p-EWLMkQu8GJG2yTUZ9KO1LOweW9cekk3auPf_B.lWJyEEE-OLOunKOEtAj4sH-4_o7OE7QiQv8KKDe0D0iur0oO_tyQRgkWaSi1EBPcqA==)]
-                secretName: estafette.secret(y64ZOUuKWds5cM3q.swavdbLumTw7-2k2xgHO4sTrClS-5tn_usV1PVaQ8d_OABAn78VAG_niP7k2uYfNyy6aa-8CkuITIt6Ybj4=.oB26a670miw89zQ20VjY7c37HVDj54fnvtdjLEyWrsXXOS5QKfhMpzSg374L4WfHRA==)
-            storage:
-              persistentVolume:
-                enabled: true
-                size: 50Gi
-                storageClass: fast
-            iap:
-              enabled: true
-              clientId: estafette.secret(0PFiczIZHfUVzimV.LjGbDOQoYhftsEQAAULSn73GYVz15Vr545C92M0wjzfsiHvOnlqVJGEXY5XztJN5oaJusMz_yTgbuneDFVJ7xjRZAGnuCpyv4FQCxnYZjWvJqJ4UWRbDvg==.fGrdU6R4fkay6VNcX1mCyKrXZkjj8ETm78Wu3o4jwzKyBsHGVInLW1R0GiRBjA3rWA==)
-              clientSecret: estafette.secret(_C6wTHA-5WAE4sls.LZyDR1hBPyC4ip6JrI68VA5pogCEphD6gU0bqYRn5M6VJwPWFP_oBw==.L5_CHkpqfwm-ruXYm4O5XDQrpBfP9zHlsAKldUvBNSnzrHk5L3nfxb_NOrNa4-V2qA==)
-
-          cron-event-sender:
-            enabled: true
-
-            logFormat: v3
-
-            extraEnv:
-              - name: "JAEGER_AGENT_HOST"
-                valueFrom:
-                  fieldRef:
-                    fieldPath: status.hostIP
-              - name: "JAEGER_SAMPLER_MANAGER_HOST_PORT"
-                value: "http://$(JAEGER_AGENT_HOST):5778/sampling"
-              - name: "JAEGER_SAMPLER_PARAM"
-                value: "0.5"
-              - name: "JAEGER_SAMPLER_TYPE"
-                value: "probabilistic"
-              - name: "JAEGER_SERVICE_NAME"
-                value: "estafette-ci-cron-event-sender"
-
-            image:
-              credentials:
-                registry: docker.io
-                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
-                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
-
-            affinity:
-              nodeAffinity:
-                preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 10
-                  preference:
-                    matchExpressions:
-                    - key: cloud.google.com/gke-preemptible
-                      operator: In
-                      values:
-                      - "true"
-
-            tolerations:
-            - key: cloud.google.com/gke-preemptible
-              operator: Equal
-              value: "true"
-              effect: NoSchedule
-
-          db-migrator:
-            enabled: true
-
-            logFormat: v3
-
-            job:
-              extraEnv:
-                - name: DB_DATABASE
-                  value: estafette.secret(CcRu_ak2gXtQkAW5.43_WP9s_WKFBoFCLCgq-8_GCyU-tFHI66xfuVF6Q4eA=.4WXWNsg4ArZLkhyHJh-v_HIczgBMjDypiefBAA3GUPjN0H0uqPEdmzQP7ADHQ5zTsQ==)
-
-            image:
-              credentials:
-                registry: docker.io
-                username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
-                password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
-
-          metrics:
-            enabled: true
-            server:
-              replicaCount: 2
-              statefulSet:
-                enabled: true
-              persistentVolume:
-                enabled: true
-
-            serverFiles:
-              prometheus.yml:
-                scrape_configs:
-                  - job_name: 'kubernetes-nodes-resource'
-                    scheme: https
-                    tls_config:
-                      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-                      insecure_skip_verify: true
-                    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-                    kubernetes_sd_configs:
-                      - role: node
-                    relabel_configs:
-                      - action: labelmap
-                        regex: __meta_kubernetes_node_label_(.+)
-                      - target_label: __address__
-                        replacement: kubernetes.default.svc:443
-                      - source_labels: [__meta_kubernetes_node_name]
-                        regex: (.+)
-                        target_label: __metrics_path__
-                        replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
-                    metric_relabel_configs:
-                      # keep only the metrics required to calculate max cpu/memory usage by a build/release job
-                      - source_labels: [__name__]
-                        action: keep
-                        regex: container_cpu_usage_seconds_total|container_memory_working_set_bytes
-                      # keep only for namespace running build/release jobs
-                      - source_labels: [namespace]
-                        action: keep
-                        regex: .+-jobs
-
-          queue:
-            enabled: true
-
-            cluster:
-              enabled: true
-              replicas: 3
-
-            affinity:
-              podAntiAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                - topologyKey: kubernetes.io/hostname
-                  labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/name: queue
-                      app.kubernetes.io/instance: estafette-ci
