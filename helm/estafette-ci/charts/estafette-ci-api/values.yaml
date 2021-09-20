@@ -259,7 +259,7 @@ secret:
 
 config:
   enabled: true
-  files: |
+  files:
     config.yaml: |
       apiServer:
         baseURL: https://{{ $.Values.baseHost }}

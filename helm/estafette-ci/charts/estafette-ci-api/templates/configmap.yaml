@@ -6,7 +6,8 @@ metadata:
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
 data:
-  {{- with .Values.config.files }}
-  {{- tpl . $ | nindent 2 }}
+  {{- range $k, $v := .Values.config.files }}
+  {{ $k }}: |
+    {{- tpl $v $ | nindent 4 }}
   {{- end }}
 {{- end -}}
