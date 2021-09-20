@@ -273,6 +273,8 @@ config:
         jwt:
           domain: {{ $.Values.baseHost }}
 
+    credentials.yaml: |
+
 # To put the admin interface behind Identity Aware Proxy (IAP) on Google Cloud Platform
 iap:
   enabled: false
