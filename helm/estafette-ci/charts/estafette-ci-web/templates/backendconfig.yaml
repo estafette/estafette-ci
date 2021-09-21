@@ -1,5 +1,9 @@
 {{- if .Values.iap.enabled }}
+{{- if $.Capabilities.APIVersions.Has "cloud.google.com/v1/BackendConfig" -}}
+apiVersion: cloud.google.com/v1
+{{- else -}}
 apiVersion: cloud.google.com/v1beta1
+{{- end }}
 kind: BackendConfig
 metadata:
   name: {{ template "estafette-ci-web.fullname" . }}
