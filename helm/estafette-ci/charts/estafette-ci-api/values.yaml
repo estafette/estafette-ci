@@ -96,6 +96,7 @@ extraSecrets: []
 # - key: gcp
 #   annotations: {}
 #   mountPath: /gcp
+#   b64encoded: false
 #   data:
 #     service-account-key.json: |
 #       {}
