@@ -256,6 +256,7 @@ secret:
   enabled: true
   # keeps the secret when uninstalling the release
   keep: true
+  annotations: {}
   # the aes-256 key to encrypt/decrypt estafette secrets; by default this is generated on install, only set it when migrating
   secretDecryptionKey:
   # the 256 bit jwt key for authentication to the api; by default this is generated on install, only set it when migrating
