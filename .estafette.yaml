@@ -35,7 +35,7 @@ stages:
         timeoutSeconds: 120
     image: extensions/helm:dev
     action: test
-    timeout: 600s
+    timeout: 900s
     values: |-
       api:
         baseHost: ci-test.estafette.io
