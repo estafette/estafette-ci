@@ -45,6 +45,25 @@ stages:
             registry: docker.io
             username: estafette.secret(mITm_O9WNW4xh5nx.Kg69U81Foi44-zavlF_LTQwyLwocgEbd2nayC0vR0g==.ORWoTdFf7yQ143Cmg07YzWbiXhmUlol4p5SYfbdNl0dtz86mYknh7LUlGweWnCA0Zg==)
             password: estafette.secret(nA7jGNDWG5ImOFQO.epJBszHzbJv2Vr0cTi9e8yAYtm5uZD7BOt9sxl2s0GB97Z9OrOtmJkKX3Z3k47DXeDP6cg==.eZ9WuXXyc5q0A6RMCHYLpHBc7zMlOC6Ya9881xH_z2UnMNbtJ2xu3Plp-jPLWAqbhg==)
+        extraSecrets:
+          - key: ssh
+            mountPath: /ssh
+            b64encoded: true
+            data:
+              git-sync-rsa: aGVsbG8K
+          - key: iam
+            mountPath: /iam
+            data:
+              service-account.json: aXMgaXQgbWUgeW91IGFyZSBsb29raW5nIGZvcgo=
+        extraConfigmaps:
+          - key: templates
+            mountPath: /templates
+            data: |
+              manifest-docker.tmpl: |
+                labels:
+                  container: {{.ContainerName}}
+                  team: {{.TeamName}}
+                  language: docker
 
       web:
         image:
