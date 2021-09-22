@@ -10,9 +10,9 @@ version:
   semver:
     major: 1
     minor: 0
-    patch: 22
+    patch: 23
     labelTemplate: '{{branch}}-{{auto}}'
-    releaseBranch: 1.0.22
+    releaseBranch: 1.0.23
 
 stages:
   lint-and-package:
