@@ -1,5 +1,9 @@
-{{- if .Values.autoscaling.enabled }}
+{{- if $.Values.autoscaling.enabled }}
+{{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta1/HorizontalPodAutoscaler" }}
 apiVersion: autoscaling/v2beta1
+{{- else -}}
+apiVersion: autoscaling/v1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "estafette-ci-web.fullname" . }}
@@ -7,22 +11,38 @@ metadata:
     {{- include "estafette-ci-web.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
+    {{ if $.Capabilities.APIVersions.Has "apps/v1/Deployment" }}
     apiVersion: apps/v1
+    {{- else if $.Capabilities.APIVersions.Has "apps/v1beta2/Deployment" }}
+    apiVersion: apps/v1beta2
+    {{- else if $.Capabilities.APIVersions.Has "apps/v1beta1/Deployment" }}
+    apiVersion: apps/v1beta1
+    {{- else -}}
+    apiVersion: extensions/v1beta1
+    {{- end }}
     kind: Deployment
     name: {{ include "estafette-ci-web.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ $.Values.autoscaling.minReplicas }}
+  maxReplicas: {{ $.Values.autoscaling.maxReplicas }}
+  {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta1/HorizontalPodAutoscaler" }}
+  {{- if or $.Values.autoscaling.targetCPUUtilizationPercentage $.Values.autoscaling.targetMemoryUtilizationPercentage }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if $.Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if $.Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ $.Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+  {{- end }}
+  {{- else }}
+  {{- if $.Values.autoscaling.targetCPUUtilizationPercentage }}
+  targetCPUUtilizationPercentage: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }}
+  {{- end }}
+  {{- end }}
 {{- end }}

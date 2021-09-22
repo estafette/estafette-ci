@@ -1,4 +1,4 @@
-{{- if .Values.ingressWebhooks.enabled -}}
+{{- if $.Values.ingressWebhooks.enabled -}}
 {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 apiVersion: networking.k8s.io/v1
 {{- else if $.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
@@ -11,14 +11,14 @@ metadata:
   name: {{ include "estafette-ci-api.fullname" . }}.webhooks
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
-  {{- with .Values.ingressWebhooks.annotations }}
+  {{- with $.Values.ingressWebhooks.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingressWebhooks.tls }}
+  {{- if $.Values.ingressWebhooks.tls }}
   tls:
-    {{- range .Values.ingressWebhooks.tls }}
+    {{- range $.Values.ingressWebhooks.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ tpl . $ | quote }}
@@ -27,7 +27,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingressWebhooks.hosts }}
+    {{- range $.Values.ingressWebhooks.hosts }}
     - host: {{ tpl .host $ | quote }}
       http:
         paths:

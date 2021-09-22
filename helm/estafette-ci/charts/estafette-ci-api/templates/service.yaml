@@ -4,23 +4,23 @@ metadata:
   name: {{ include "estafette-ci-api.fullname" . }}
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
-  {{- if or .Values.service.annotations .Values.iap.enabled }}
+  {{- if or $.Values.service.annotations $.Values.iap.enabled }}
   annotations:
-  {{- with .Values.service.annotations }}
+  {{- with $.Values.service.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if .Values.iap.enabled }}
+  {{- if $.Values.iap.enabled }}
     beta.cloud.google.com/backend-config: '{"default": "{{ template "estafette-ci-api.fullname" . }}"}'
   {{- end }}
   {{- end }}
 spec:
-  {{- if .Values.iap.enabled }}
+  {{- if $.Values.iap.enabled }}
   type: NodePort
   {{- else }}
-  type: {{ .Values.service.type }}
+  type: {{ $.Values.service.type }}
   {{- end }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ $.Values.service.port }}
       targetPort: http
       protocol: TCP
       name: http

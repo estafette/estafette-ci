@@ -3,7 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "estafette-ci-cron-event-sender.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- default .Chart.Name $.Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -12,10 +12,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "estafette-ci-cron-event-sender.fullname" -}}
-{{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- if $.Values.fullnameOverride -}}
+{{- $.Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $name := default .Chart.Name $.Values.nameOverride -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -42,7 +42,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.Version | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- range $key, $value := .Values.extraLabels }}
+{{- range $key, $value := $.Values.extraLabels }}
 {{ $key }}: {{ $value }}
 {{- end }}
 {{- end -}}
@@ -51,10 +51,10 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Create the name of the service account to use
 */}}
 {{- define "estafette-ci-cron-event-sender.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "estafette-ci-cron-event-sender.fullname" .) .Values.serviceAccount.name }}
+{{- if $.Values.serviceAccount.create -}}
+    {{ default (include "estafette-ci-cron-event-sender.fullname" .) $.Values.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" $.Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -62,5 +62,5 @@ Create the name of the service account to use
 Create the tag of the image to use
 */}}
 {{- define "estafette-ci-cron-event-sender.imageTag" -}}
-{{ default .Chart.Version .Values.image.tag }}
+{{ default .Chart.Version $.Values.image.tag }}
 {{- end -}}

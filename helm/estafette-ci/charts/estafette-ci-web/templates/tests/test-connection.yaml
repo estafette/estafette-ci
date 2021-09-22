@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "estafette-ci-web.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "estafette-ci-web.fullname" . }}:{{ $.Values.service.port }}']
   restartPolicy: Never

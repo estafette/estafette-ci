@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if $.Values.ingress.enabled -}}
 {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 apiVersion: networking.k8s.io/v1
 {{- else if $.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
@@ -11,20 +11,20 @@ metadata:
   name: {{ include "estafette-ci-api.fullname" . }}
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
-  {{- if or .Values.ingress.annotations .Values.iap.enabled }}
+  {{- if or $.Values.ingress.annotations $.Values.iap.enabled }}
   annotations:
-  {{- with .Values.ingress.annotations }}
+  {{- with $.Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if .Values.iap.enabled }}
+  {{- if $.Values.iap.enabled }}
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "false"
   {{- end }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if $.Values.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range $.Values.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ tpl . $ | quote }}
@@ -33,7 +33,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range $.Values.ingress.hosts }}
     - host: {{ tpl .host $ | quote }}
       http:
         paths:

@@ -1,6 +1,6 @@
 {{- $fullName := include "estafette-ci-web.fullname" . -}}
 {{- $labels := include "estafette-ci-web.labels" . -}}
-{{- range .Values.extraConfigmaps -}}
+{{- range $.Values.extraConfigmaps -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:

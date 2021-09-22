@@ -12,7 +12,7 @@ metadata:
 spec:
   template:
     metadata:
-      {{- with .Values.job.podAnnotations }}
+      {{- with $.Values.job.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -20,84 +20,84 @@ spec:
         {{- include "estafette-ci-db-migrator.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: OnFailure
-      {{- if or .Values.image.credentials .Values.imagePullSecrets }}
+      {{- if or $.Values.image.credentials $.Values.imagePullSecrets }}
       imagePullSecrets:
-      {{- if .Values.image.credentials }}
+      {{- if $.Values.image.credentials }}
         - name: {{ template "estafette-ci-db-migrator.fullname" . }}.registry
       {{- end }}
-      {{- with .Values.imagePullSecrets }}
+      {{- with $.Values.imagePullSecrets }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- end }}
       serviceAccountName: {{ include "estafette-ci-db-migrator.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.job.podSecurityContext | nindent 8 }}
+        {{- toYaml $.Values.job.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.job.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.Version }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml $.Values.job.securityContext | nindent 12 }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default .Chart.Version }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
           env:
             - name: "ESTAFETTE_LOG_FORMAT"
-              value: "{{ .Values.logFormat }}"
+              value: "{{ $.Values.logFormat }}"
             - name: "ESTAFETTE_LOG_LEVEL"
-              value: "{{ .Values.logLevel }}"
-          {{- with .Values.job.extraEnv }}
+              value: "{{ $.Values.logLevel }}"
+          {{- with $.Values.job.extraEnv }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.job.resources | nindent 12 }}
-          {{- if or .Values.job.extraVolumeMounts .Values.extraConfigmaps .Values.extraSecrets }}
+            {{- toYaml $.Values.job.resources | nindent 12 }}
+          {{- if or $.Values.job.extraVolumeMounts $.Values.extraConfigmaps $.Values.extraSecrets }}
           volumeMounts:
-          {{- range .Values.extraConfigmaps }}
+          {{- range $.Values.extraConfigmaps }}
           {{- if .mountPath }}
           - name: configs-{{ .key }}
             mountPath: {{ .mountPath }}
           {{- end }}
           {{- end }}
-          {{- range .Values.extraSecrets }}
+          {{- range $.Values.extraSecrets }}
           {{- if .mountPath }}
           - name: secrets-{{ .key }}
             mountPath: {{ .mountPath }}
           {{- end }}
           {{- end }}
-          {{- with .Values.job.extraVolumeMounts }}
+          {{- with $.Values.job.extraVolumeMounts }}
           {{- tpl . $ | nindent 10 }}
           {{- end }}
           {{- end }}
-        {{- with .Values.job.extraContainers }}
+        {{- with $.Values.job.extraContainers }}
         {{- tpl . $ | nindent 8 }}
         {{- end }}
-      {{- if or .Values.job.extraVolumes .Values.extraConfigmaps .Values.extraSecrets }}
+      {{- if or $.Values.job.extraVolumes $.Values.extraConfigmaps $.Values.extraSecrets }}
       volumes:
-      {{- range .Values.extraConfigmaps }}
+      {{- range $.Values.extraConfigmaps }}
       {{- if .mountPath }}
       - name: configs-{{ .key }}
         configMap: 
           name: {{ $fullName }}.{{ .key }}
       {{- end }}
       {{- end }}
-      {{- range .Values.extraSecrets }}
+      {{- range $.Values.extraSecrets }}
       {{- if .mountPath }}
       - name: secrets-{{ .key }}
         secret:
           secretName: {{ $fullName }}.{{ .key }}
       {{- end }}
       {{- end }}
-      {{- with .Values.job.extraVolumes }}
+      {{- with $.Values.job.extraVolumes }}
       {{- tpl . $ | nindent 6 }}
       {{- end }}
       {{- end }}
-      {{- with .Values.job.nodeSelector }}
+      {{- with $.Values.job.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.job.affinity }}
+      {{- with $.Values.job.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.job.tolerations }}
+      {{- with $.Values.job.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.config.enabled -}}
+{{- if $.Values.config.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
 data:
-  {{- range $k, $v := .Values.config.files }}
+  {{- range $k, $v := $.Values.config.files }}
   {{ $k }}: |
     {{- tpl $v $ | nindent 4 }}
   {{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.serviceAccount.create }}
+{{- if $.Values.serviceAccount.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -12,6 +12,6 @@ roleRef:
   name: {{ include "estafette-ci-api.fullname" . }}.builder
 subjects:
 - kind: ServiceAccount
-  name: {{ .Values.serviceAccount.builderServiceAccountName }}
+  name: {{ $.Values.serviceAccount.builderServiceAccountName }}
   namespace: {{ include "estafette-ci-api.jobNamespace" . }}
 {{- end }}

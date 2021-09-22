@@ -10,16 +10,16 @@ metadata:
   labels:
 {{ include "estafette-ci-cron-event-sender.labels" . | indent 4 }}
 spec:
-  schedule: '{{ .Values.cronjob.schedule }}'
-  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy }}
-  failedJobsHistoryLimit: {{ .Values.cronjob.failedJobsHistoryLimit }}
-  successfulJobsHistoryLimit: {{ .Values.cronjob.successfulJobsHistoryLimit }}
-  suspend: {{ .Values.cronjob.suspend }}
+  schedule: '{{ $.Values.cronjob.schedule }}'
+  concurrencyPolicy: {{ $.Values.cronjob.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ $.Values.cronjob.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ $.Values.cronjob.successfulJobsHistoryLimit }}
+  suspend: {{ $.Values.cronjob.suspend }}
   jobTemplate:
     spec:
-      completions: {{ .Values.cronjob.completions }}
-      parallelism: {{ .Values.cronjob.parallelism }}
-      backoffLimit: {{ .Values.cronjob.backoffLimit }}
+      completions: {{ $.Values.cronjob.completions }}
+      parallelism: {{ $.Values.cronjob.parallelism }}
+      backoffLimit: {{ $.Values.cronjob.backoffLimit }}
       template:
         metadata:
           labels:
@@ -28,52 +28,52 @@ spec:
             {{- if .Chart.Version }}
             app.kubernetes.io/version: {{ .Chart.Version | quote }}
             {{- end }}
-            {{- range $key, $value := .Values.extraPodLabels }}
+            {{- range $key, $value := $.Values.extraPodLabels }}
             {{ $key }}: {{ $value }}
             {{- end }}
         spec:
-          {{- if .Values.image.credentials }}
+          {{- if $.Values.image.credentials }}
           imagePullSecrets:
           - name: {{ template "estafette-ci-cron-event-sender.fullname" . }}.registry
           {{- end }}
           serviceAccountName: {{ template "estafette-ci-cron-event-sender.serviceAccountName" . }}
-          restartPolicy: {{ .Values.cronjob.restartPolicy }}
+          restartPolicy: {{ $.Values.cronjob.restartPolicy }}
           securityContext:
-            {{- toYaml .Values.podSecurityContext | nindent 12 }}
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
           containers:
             - name: {{ .Chart.Name }}
               securityContext:
-                {{- toYaml .Values.securityContext | nindent 16 }}
-              image: "{{ .Values.image.repository }}:{{ template "estafette-ci-cron-event-sender.imageTag" . }}"
-              imagePullPolicy: {{ .Values.image.pullPolicy }}
-              {{- with .Values.extraArgs }}
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              image: "{{ $.Values.image.repository }}:{{ template "estafette-ci-cron-event-sender.imageTag" . }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              {{- with $.Values.extraArgs }}
               args:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
               env:
                 - name: "ESTAFETTE_LOG_FORMAT"
-                  value: "{{ .Values.logFormat }}"
+                  value: "{{ $.Values.logFormat }}"
                 - name: "ESTAFETTE_LOG_LEVEL"
-                  value: "{{ .Values.logLevel }}"
+                  value: "{{ $.Values.logLevel }}"
                 - name: "QUEUE_HOSTS"
-                  value: "{{ join `,` .Values.config.queueHosts }}"
+                  value: "{{ join `,` $.Values.config.queueHosts }}"
                 - name: "QUEUE_SUBJECT"
-                  value: "{{ .Values.config.queueSubject }}"
-              {{- with .Values.extraEnv }}
+                  value: "{{ $.Values.config.queueSubject }}"
+              {{- with $.Values.extraEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}
               resources:
-                {{- toYaml .Values.resources | nindent 16 }}
+                {{- toYaml $.Values.resources | nindent 16 }}
           terminationGracePeriodSeconds: 300
-          {{- with .Values.nodeSelector }}
+          {{- with $.Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-        {{- with .Values.affinity }}
+        {{- with $.Values.affinity }}
           affinity:
             {{- toYaml . | nindent 12 }}
         {{- end }}
-        {{- with .Values.tolerations }}
+        {{- with $.Values.tolerations }}
           tolerations:
             {{- toYaml . | nindent 12 }}
         {{- end }}
