@@ -72,7 +72,7 @@ spec:
                       name: {{ include "estafette-ci-hanging-job-cleaner.fullname" . }}
                       key: clientSecret
                 - name: "JOB_NAMESPACE"
-                  value: "{{ $.Values.config.jobNamespace }}"
+                  value: "{{ tpl $.Values.config.jobNamespace $ }}"
               {{- with $.Values.extraEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}

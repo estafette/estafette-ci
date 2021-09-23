@@ -30,7 +30,7 @@ secret:
 
 cronjob:
   schedule: '*/5 * * * *'
-  concurrencypolicy: Forbid
+  concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 3
   suspend: false
