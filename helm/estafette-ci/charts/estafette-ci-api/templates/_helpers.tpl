@@ -68,7 +68,7 @@ Create the name of the service account to use
 Create the namespace for build/release jobs
 */}}
 {{- define "estafette-ci-api.jobNamespace" -}}
-{{- if $.Values.fullnameOverride }}
+{{- if $.Values.jobNamespaceOverride }}
 {{- $.Values.jobNamespaceOverride }}
 {{- else }}
 {{- .Release.Namespace }}-jobs

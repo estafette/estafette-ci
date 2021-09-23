@@ -5,10 +5,10 @@ apiVersion: batch/v1beta1
 {{- end }}
 kind: CronJob
 metadata:
-  name: {{ include "estafette-ci-cron-event-sender.fullname" . }}
+  name: {{ include "estafette-ci-hanging-job-cleaner.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "estafette-ci-cron-event-sender.labels" . | indent 4 }}
+{{ include "estafette-ci-hanging-job-cleaner.labels" . | indent 4 }}
 spec:
   schedule: '{{ $.Values.cronjob.schedule }}'
   concurrencyPolicy: {{ $.Values.cronjob.concurrencyPolicy }}
@@ -23,20 +23,27 @@ spec:
       template:
         metadata:
           labels:
-            app.kubernetes.io/name: {{ include "estafette-ci-cron-event-sender.name" . }}
+            app.kubernetes.io/name: {{ include "estafette-ci-hanging-job-cleaner.name" . }}
             app.kubernetes.io/instance: {{ .Release.Name }}
-            {{- if .Chart.Version }}
-            app.kubernetes.io/version: {{ .Chart.Version | quote }}
+            {{- if .Chart.AppVersion }}
+            app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
             {{- end }}
             {{- range $key, $value := $.Values.extraPodLabels }}
             {{ $key }}: {{ $value }}
             {{- end }}
+          annotations:
+            checksum/secrets: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         spec:
-          {{- if $.Values.image.credentials }}
+          {{- if or $.Values.image.credentials $.Values.imagePullSecrets }}
           imagePullSecrets:
-          - name: {{ template "estafette-ci-cron-event-sender.fullname" . }}.registry
+          {{- if $.Values.image.credentials }}
+            - name: {{ template "estafette-ci-hanging-job-cleaner.fullname" . }}.registry
           {{- end }}
-          serviceAccountName: {{ template "estafette-ci-cron-event-sender.serviceAccountName" . }}
+          {{- with $.Values.imagePullSecrets }}
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- end }}
+          serviceAccountName: {{ template "estafette-ci-hanging-job-cleaner.serviceAccountName" . }}
           restartPolicy: {{ $.Values.cronjob.restartPolicy }}
           securityContext:
             {{- toYaml $.Values.podSecurityContext | nindent 12 }}
@@ -55,10 +62,17 @@ spec:
                   value: "{{ $.Values.logFormat }}"
                 - name: "ESTAFETTE_LOG_LEVEL"
                   value: "{{ $.Values.logLevel }}"
-                - name: "QUEUE_HOSTS"
-                  value: "{{ join `,` $.Values.config.queueHosts }}"
-                - name: "QUEUE_SUBJECT"
-                  value: "{{ $.Values.config.queueSubject }}"
+                - name: "API_BASE_URL"
+                  value: "{{ tpl $.Values.config.apiBaseURL $ }}"
+                - name: "CLIENT_ID"
+                  value: "{{ $.Values.config.clientID }}"
+                - name: "CLIENT_SECRET"
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "estafette-ci-hanging-job-cleaner.fullname" . }}
+                      key: clientSecret
+                - name: "JOB_NAMESPACE"
+                  value: "{{ $.Values.config.jobNamespace }}"
               {{- with $.Values.extraEnv }}
                 {{- toYaml . | nindent 16 }}
               {{- end }}

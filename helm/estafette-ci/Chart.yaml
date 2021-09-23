@@ -33,6 +33,10 @@ dependencies:
   version: ^1
   alias: db-migrator
   condition: db-migrator.enabled
+- name: estafette-ci-hanging-job-cleaner
+  version: ^1
+  alias: hanging-job-cleaner
+  condition: hanging-job-cleaner.enabled
 - name: estafette-ci-web
   version: ^1
   alias: web

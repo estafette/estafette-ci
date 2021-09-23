@@ -1,0 +1,124 @@
+# Default values for estafette-ci-hanging-job-cleaner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#
+# APPLICATION SETTINGS
+#
+
+# In order to set up the estafette-ci-hanging-job-cleaner you need to
+# 1. Set up estafette-ci while keeping this subchart disabled (default)
+# 2. Navigate to https://<base host>/admin/clients as an administrator
+# 3. Create a client named estafette-ci-hanging-job-cleaner with roles organization.pipelines.operator and group.pipelines.operator, linked to all configured organizations
+# 4. Use the new client's Client ID and Client secret in hanging-job-cleaner.config.clientID and hanging-job-cleaner.secret.clientSecret
+# 5. Set hanging-job-cleaner.enabled: true in the main values
+# 6. Upgrade the estafette-ci Helm release
+
+config:
+  # base url towards the estafette-ci api
+  apiBaseURL: 'http://estafette-ci-api.{{ .Release.Namespace }}.svc.cluster.local'
+  # client id for the client created in estafette-ci admin for this application
+  clientID: ""
+  # the namespace where estafette build and release jobs are created.
+  jobNamespace: '{{ .Release.Namespace }}-jobs'
+
+secret:
+  # if set to true the values are already base64 encoded when provided, otherwise the template performs the base64 encoding
+  valuesAreBase64Encoded: false
+  # client secret for the client created in estafette-ci admin for this application
+  clientSecret: ""
+
+cronjob:
+  schedule: '*/5 * * * *'
+  concurrencypolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  suspend: false
+
+  completions: 1
+  parallelism: 1
+  backoffLimit: 6
+
+  restartPolicy: OnFailure
+
+image:
+  repository: estafette/estafette-ci-hanging-job-cleaner
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart version.
+  tag: ""
+  credentials: {}
+    # registry: docker.io
+    # username: john_doe
+    # password: changeme
+
+# the following log formats are available: plaintext, console, json, stackdriver, v3 (see https://github.com/estafette/estafette-foundation for more info)
+logFormat: json
+
+# the following levels and upwards will be logged: disabled, trace, debug, info, warn, error, fatal, panic (see https://github.com/estafette/estafette-foundation for more info)
+logLevel: debug
+
+#
+# GENERIC SETTINGS
+#
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+jobNamespaceOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+rbac:
+  # Specifies whether roles and bindings should be created
+  enable: true
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # requests:
+  #   cpu: 50m
+  #   memory: 250Mi
+  # limits:
+  #   cpu: 400m
+  #   memory: 800Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+  # nodeAffinity:
+  #   preferredDuringSchedulingIgnoredDuringExecution:
+  #   - weight: 10
+  #     preference:
+  #       matchExpressions:
+  #       - key: cloud.google.com/gke-preemptible
+  #         operator: In
+  #         values:
+  #         - "true"
+
+# pass (additional) arguments to the container
+extraArgs: []
+
+# use to set extra environment variables
+extraEnv: []
+
+# use to add extra labels
+extraLabels: {}
+
+# use to add extra labels to podspec for getting their values in prometheus
+extraPodLabels: {}

@@ -14,6 +14,10 @@ db-migrator:
 cron-event-sender:
   enabled: true
 
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-hanging-job-cleaner/values.yaml
+hanging-job-cleaner:
+  enabled: false
+
 # https://github.com/cockroachdb/helm-charts/blob/master/cockroachdb/values.yaml
 db:
   enabled: true
