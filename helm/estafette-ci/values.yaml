@@ -132,6 +132,10 @@ queue:
   natsbox:
     enabled: false
 
+# https://github.com/estafette/estafette-ci/blob/main/helm/estafette-ci/charts/estafette-ci-db-client/values.yaml
+db-client:
+  enabled: false
+
 # https://github.com/jetstack/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
 cert-manager:
   enabled: false

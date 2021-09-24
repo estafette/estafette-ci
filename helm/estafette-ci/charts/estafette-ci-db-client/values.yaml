@@ -1,0 +1,59 @@
+image:
+  repository: cockroachdb/cockroach
+  pullPolicy: IfNotPresent
+  credentials: {}
+    # registry: docker.io
+    # username: john_doe
+    # password: changeme
+
+dbClientSecretName: estafette-ci-db-client-secret
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+extraLabels: {}
+#   team: estafette
+
+pod:
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  resources: {}
+    # requests:
+    #   cpu: 50m
+    #   memory: 250Mi
+    # limits:
+    #   cpu: 400m
+    #   memory: 800Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+    # nodeAffinity:
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #   - weight: 10
+    #     preference:
+    #       matchExpressions:
+    #       - key: cloud.google.com/gke-preemptible
+    #         operator: In
+    #         values:
+    #         - "true"
