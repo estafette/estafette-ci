@@ -34,7 +34,7 @@ dependencies:
   alias: db-migrator
   condition: db-migrator.enabled
 - name: estafette-ci-db-client
-  version: ^1
+  version: '>=1'
   alias: db-client
   condition: db-client.enabled
 - name: estafette-ci-hanging-job-cleaner
