@@ -23,16 +23,10 @@ api:
   integrationsHost: '<public host to receive webhooks>'
 ```
 
-Create a namespace with
-
-```
-kubectl create namespace estafette-ci
-```
-
 Then install the `estafette-ci` chart with
 
 ```
-helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --values values.yaml --timeout 600s
+helm upgrade --install estafette-ci estafette/estafette-ci -n estafette-ci --create-namespace --values values.yaml --timeout 600s
 ```
 
 This should get all parts up and running, you can check with:
