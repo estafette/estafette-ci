@@ -36,3 +36,24 @@ watch kubectl get svc,ing,deploy,sts,po -n estafette-ci
 ```
 
 For more details on how to install and configure Estafette read the documentation at https://estafette.io/getting-started/installation/.
+
+# Development
+
+For creating a new release and it's release notes make sure you create issues for your changes in https://github.com/estafette/estafette-ci/issues. Assign the issue to yourself, and link (or create) a milestone equal to version  in the `releaseBranch` in the `.estafette.yaml` file.
+
+If any of your updates are in one of the components referenced by the subcharts make sure to update the version in the subchart's `Chart.yaml`.
+
+Once you've fixed and closed all issues you want to go into the next milestone then run the following commands
+
+```
+git checkout main
+git pull
+git checkout -b <releaseBranch>
+git push origin <releaseBranch>
+git checkout main
+# bump the version in .estafette.yaml to the next patch and update the releaseBranch accordingly
+git commit -am "bump version to 1.x.x"
+git push
+```
+
+Once the version for the milestone has built release it to the `release` target at https://estafette.travix.com/pipelines/github.com/estafette/estafette-ci/overview so the github milestone gets closed, a github release gets created with release notes generated from the closed issues in the milestone.
