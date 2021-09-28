@@ -138,6 +138,13 @@ stages:
     action: publish
     repoBranch: main
 
+  tag-revision:
+    image: alpine:3.14
+    commands:
+    - apk add git
+    - git tag ${ESTAFETTE_BUILD_VERSION}
+    - git push origin ${ESTAFETTE_BUILD_VERSION}
+
   slack-notify:
     image: extensions/slack-build-status:dev
     workspace: estafette
