@@ -144,6 +144,9 @@ stages:
     - apk add git
     - git tag ${ESTAFETTE_BUILD_VERSION}
     - git push origin ${ESTAFETTE_BUILD_VERSION}
+    when:
+      status == 'succeeded' &&
+      branch != 'main'
 
   slack-notify:
     image: extensions/slack-build-status:dev
