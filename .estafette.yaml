@@ -143,7 +143,7 @@ stages:
     commands:
     - apk add git
     - git tag ${ESTAFETTE_BUILD_VERSION}
-    - git push origin ${ESTAFETTE_BUILD_VERSION}
+    - git push --force --tags origin ${ESTAFETTE_BUILD_VERSION}
 
   slack-notify:
     image: extensions/slack-build-status:dev
