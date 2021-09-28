@@ -52,12 +52,12 @@ dependencies:
   alias: db
   condition: db.enabled
 - name: prometheus
-  version: 14.6.0
+  version: 14.8.0
   repository: https://prometheus-community.github.io/helm-charts
   alias: metrics
   condition: metrics.enabled
 - name: nats
-  version: 0.8.8
+  version: 0.8.9
   repository: https://nats-io.github.io/k8s/helm/charts/
   alias: queue
   condition: queue.enabled
