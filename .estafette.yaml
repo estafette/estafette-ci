@@ -146,7 +146,7 @@ stages:
     - git push origin ${ESTAFETTE_BUILD_VERSION}
     when:
       status == 'succeeded' &&
-      branch != 'main'
+      branch == 'main'
 
   slack-notify:
     image: extensions/slack-build-status:dev
