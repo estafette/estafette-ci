@@ -34,6 +34,13 @@ db:
     annotations:
       # required when tls is enabled for cluster and nginx ingress is used
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  tls:
+    certs:
+      selfSigner:
+        # Wait time for each cockroachdb replica to become ready once it comes in running state. Only considered when rotateCerts is set to true
+        readinessWait: 1m
+        # Wait time for each cockroachdb replica to get to running state. Only considered when rotateCerts is set to true
+        podUpdateTimeout: 5m
 
 # https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
 metrics:
