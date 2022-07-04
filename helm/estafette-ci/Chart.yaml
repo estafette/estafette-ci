@@ -47,7 +47,7 @@ dependencies:
   condition: web.enabled
 
 - name: cockroachdb
-  version: 7.0.0
+  version: 8.1.1
   repository: https://charts.cockroachdb.com/
   alias: db
   condition: db.enabled
