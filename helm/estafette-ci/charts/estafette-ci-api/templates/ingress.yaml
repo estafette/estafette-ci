@@ -22,6 +22,9 @@ metadata:
   {{- end }}
   {{- end }}
 spec:
+  {{- if $.Values.ingress.ingressClassName }}
+  ingressClassName: "{{ $.Values.ingress.ingressClassName }}"
+  {{- end}}
   {{- if $.Values.ingress.tls }}
   tls:
     {{- range $.Values.ingress.tls }}
