@@ -171,6 +171,7 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+  ingressClassName: 
   hosts:
     - host: '{{ $.Values.baseHost }}'
       paths:
@@ -199,6 +200,7 @@ ingressWebhooks:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+  ingressClassName: 
   hosts:
     - host: '{{ $.Values.integrationsHost }}'
       paths:

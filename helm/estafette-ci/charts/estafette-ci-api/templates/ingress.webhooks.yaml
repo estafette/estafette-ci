@@ -16,6 +16,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- if $.Values.ingressWebhooks.ingressClassName }}
+  ingressClassName: "{{ $.Values.ingressWebhooks.ingressClassName }}"
+  {{- end}}
   {{- if $.Values.ingressWebhooks.tls }}
   tls:
     {{- range $.Values.ingressWebhooks.tls }}
