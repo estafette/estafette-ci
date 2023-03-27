@@ -9,10 +9,10 @@ labels:
 version:
   semver:
     major: 1
-    minor: 3
-    patch: 2
+    minor: 4
+    patch: 0
     labelTemplate: '{{branch}}-{{auto}}'
-    releaseBranch: 1.3.2
+    releaseBranch: 1.4.0
 
 stages:
   lint-and-package:
@@ -139,9 +139,8 @@ stages:
     repoBranch: main
 
   tag-revision:
-    image: alpine:3.14
+    image: bitnami/git
     commands:
-    - apk add git
     - git tag ${ESTAFETTE_BUILD_VERSION}
     - git push origin ${ESTAFETTE_BUILD_VERSION}
     when:
