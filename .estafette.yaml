@@ -10,9 +10,9 @@ version:
   semver:
     major: 1
     minor: 4
-    patch: 0
+    patch: 1
     labelTemplate: '{{branch}}-{{auto}}'
-    releaseBranch: 1.4.0
+    releaseBranch: 1.4.1
 
 stages:
   lint-and-package:
