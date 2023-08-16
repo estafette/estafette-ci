@@ -9,10 +9,10 @@ labels:
 version:
   semver:
     major: 1
-    minor: 4
-    patch: 1
+    minor: 5
+    patch: 0
     labelTemplate: '{{branch}}-{{auto}}'
-    releaseBranch: 1.4.1
+    releaseBranch: 1.5.0
 
 stages:
   lint-and-package:
@@ -28,7 +28,7 @@ stages:
   test-helm-chart:
     services:
     - name: kubernetes
-      image: bsycorp/kind:latest-1.19
+      image: bsycorp/kind:latest-1.23
       readiness:
         path: /kubernetes-ready
         port: 10080
