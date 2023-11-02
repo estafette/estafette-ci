@@ -7,15 +7,7 @@ metadata:
     {{- include "estafette-ci-api.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
-    {{ if $.Capabilities.APIVersions.Has "apps/v1/Deployment" }}
     apiVersion: apps/v1
-    {{- else if $.Capabilities.APIVersions.Has "apps/v1beta2/Deployment" }}
-    apiVersion: apps/v1beta2
-    {{- else if $.Capabilities.APIVersions.Has "apps/v1beta1/Deployment" }}
-    apiVersion: apps/v1beta1
-    {{- else -}}
-    apiVersion: extensions/v1beta1
-    {{- end }}
     kind: Deployment
     name: {{ include "estafette-ci-api.fullname" . }}
   minReplicas: {{ $.Values.autoscaling.minReplicas }}
