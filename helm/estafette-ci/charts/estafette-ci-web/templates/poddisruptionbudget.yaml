@@ -1,6 +1,5 @@
 {{- if $.Values.pdb.enabled }}
 apiVersion: policy/v1
-{{- end }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "estafette-ci-web.fullname" . }}
