@@ -1,9 +1,5 @@
 {{- if $.Values.autoscaling.enabled }}
-{{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta1/HorizontalPodAutoscaler" }}
-apiVersion: autoscaling/v2beta1
-{{- else -}}
 apiVersion: autoscaling/v1
-{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "estafette-ci-api.fullname" . }}
