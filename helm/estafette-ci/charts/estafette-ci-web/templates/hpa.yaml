@@ -20,25 +20,24 @@ spec:
     name: {{ include "estafette-ci-web.fullname" . }}
   minReplicas: {{ $.Values.autoscaling.minReplicas }}
   maxReplicas: {{ $.Values.autoscaling.maxReplicas }}
-  {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta1/HorizontalPodAutoscaler" }}
   {{- if or $.Values.autoscaling.targetCPUUtilizationPercentage $.Values.autoscaling.targetMemoryUtilizationPercentage }}
   metrics:
     {{- if $.Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if $.Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ $.Values.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ $.Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
-  {{- end }}
-  {{- else }}
-  {{- if $.Values.autoscaling.targetCPUUtilizationPercentage }}
-  targetCPUUtilizationPercentage: {{ $.Values.autoscaling.targetCPUUtilizationPercentage }}
   {{- end }}
   {{- end }}
 {{- end }}
