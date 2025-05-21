@@ -32,7 +32,7 @@ stages:
       readiness:
         path: /kubernetes-ready
         port: 10080
-        timeoutSeconds: 120
+        timeoutSeconds: 900
     image: extensions/helm:dev
     action: test
     timeout: 900s
