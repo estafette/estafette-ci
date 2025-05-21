@@ -28,7 +28,7 @@ stages:
   test-helm-chart:
     services:
     - name: kubernetes
-      image: bsycorp/kind:latest-1.23
+      image: nosugarcoffee/kind:latest-v1.23.10
       readiness:
         path: /kubernetes-ready
         port: 10080
