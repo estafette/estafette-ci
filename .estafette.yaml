@@ -28,13 +28,11 @@ stages:
   test-helm-chart:
     services:
     - name: kubernetes
-      image: liangliangdai/kind:a500b58-v1.23.10
+      image: nosugarcoffee/kind:latest-v1.23.10
       readiness:
         path: /kubernetes-ready
         port: 10080
-        timeoutSeconds: 900
-      securityContext:
-        privileged: true
+        timeoutSeconds: 120
     image: extensions/helm:dev
     action: test
     timeout: 900s
